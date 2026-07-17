@@ -16,7 +16,10 @@ export function buildProviders(
   config: NetworkConfig,
 ): ReceiptProviders {
   const zkConfigProvider = new NodeZkConfigProvider<ReceiptCircuits>(zkConfigPath);
-  const password = process.env['MIDNIGHT_PRIVATE_STATE_PASSWORD'] ?? 'Local-Pilot-Password-2026!';
+  const password = process.env['MIDNIGHT_PRIVATE_STATE_PASSWORD']?.trim();
+  if (!password) {
+    throw new Error('MIDNIGHT_PRIVATE_STATE_PASSWORD is required');
+  }
   return {
     privateStateProvider: levelPrivateStateProvider<string, ReceiptPrivateState>({
       privateStateStoreName: `esense-receipt-${config.networkId}`,

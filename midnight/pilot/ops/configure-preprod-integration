@@ -15,7 +15,9 @@ contract_address="$(printf '%s' "$contract_address" | tr '[:upper:]' '[:lower:]'
 
 private_env=/etc/esense-midnight/preprod.env
 [ -f "$private_env" ] || { echo "The Preprod service identity is not initialized." >&2; exit 1; }
-production_env=/home/cardano/esense/.env
+production_env="${ESENSE_PRODUCTION_ENV:-/opt/esense/.env}"
+production_owner="${ESENSE_SERVICE_USER:-esense}"
+production_group="${ESENSE_SERVICE_GROUP:-$production_owner}"
 [ -f "$production_env" ] || { echo "The esense production environment is missing." >&2; exit 1; }
 
 set_value() {
@@ -49,10 +51,10 @@ set_value "$private_env" MIDNIGHT_WALLET_STATE_DIR "/var/lib/esense-midnight/sta
 set_value "$private_env" MIDNIGHT_SYNC_TIMEOUT_MS "21600000" root root 0600
 set_value "$private_env" MIDNIGHT_SYNC_CHECKPOINT_MS "300000" root root 0600
 
-set_value "$production_env" ESENSE_MIDNIGHT_ENABLED true cardano cardano 0600
-set_value "$production_env" ESENSE_MIDNIGHT_NETWORK preprod cardano cardano 0600
-set_value "$production_env" ESENSE_MIDNIGHT_CONTRACT_ADDRESS "$contract_address" cardano cardano 0600
-set_value "$production_env" ESENSE_MIDNIGHT_WORKER_TOKEN "$worker_token" cardano cardano 0600
+set_value "$production_env" ESENSE_MIDNIGHT_ENABLED true "$production_owner" "$production_group" 0600
+set_value "$production_env" ESENSE_MIDNIGHT_NETWORK preprod "$production_owner" "$production_group" 0600
+set_value "$production_env" ESENSE_MIDNIGHT_CONTRACT_ADDRESS "$contract_address" "$production_owner" "$production_group" 0600
+set_value "$production_env" ESENSE_MIDNIGHT_WORKER_TOKEN "$worker_token" "$production_owner" "$production_group" 0600
 
 systemctl restart esense.service
 systemctl enable --now esense-midnight-worker.service

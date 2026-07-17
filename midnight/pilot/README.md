@@ -91,7 +91,7 @@ The synthetic demonstration package can then be queued without exposing report
 content:
 
 ```bash
-/home/cardano/esense/.venv/bin/python /home/cardano/esense/queue_midnight_demo.py
+/opt/esense/.venv/bin/python /opt/esense/queue_midnight_demo.py
 ```
 
 Operational invariants:
