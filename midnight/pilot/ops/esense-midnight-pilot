@@ -1,0 +1,21 @@
+#!/bin/sh
+set -eu
+
+if [ "$(id -u)" -ne 0 ]; then
+  echo "This launcher must run as root." >&2
+  exit 1
+fi
+
+set -a
+. /etc/esense-midnight/preprod.env
+set +a
+: "${MIDNIGHT_WALLET_STATE_DIR:=/var/lib/esense-midnight/state/wallet-cache}"
+: "${MIDNIGHT_SYNC_TIMEOUT_MS:=21600000}"
+: "${MIDNIGHT_SYNC_CHECKPOINT_MS:=300000}"
+export MIDNIGHT_WALLET_STATE_DIR MIDNIGHT_SYNC_TIMEOUT_MS MIDNIGHT_SYNC_CHECKPOINT_MS
+
+cd /var/lib/esense-midnight/state
+exec runuser -u esense-midnight --preserve-environment -- \
+  /opt/esense-midnight/node22/bin/node \
+  /opt/esense-midnight/app/node_modules/tsx/dist/cli.mjs \
+  "$@"

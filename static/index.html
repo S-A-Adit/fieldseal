@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="no">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f0502f" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="esense" />
+    <link rel="manifest" href="/static/manifest.webmanifest" />
+    <link rel="stylesheet" href="/static/app.css?v=32" onerror="this.onerror=null;this.href='./app.css?v=32'" />
+    <title>esense | dokumentasjon og oppdrag</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <button class="brand" id="homeButton" type="button" aria-label="Gå til oversikt"><span class="brand-mark">e</span><strong>esense</strong></button>
+        <div class="organization-context">
+          <strong id="organizationNameDisplay" translate="no"></strong>
+        </div>
+        <button class="topbar-helper" id="topbarAssistant" type="button" hidden><span>Neste</span><strong id="topbarAssistantTitle">Ingen utestående handlinger</strong><b aria-hidden="true">›</b></button>
+        <div class="top-actions">
+          <button class="secondary compact-button onboarding-organization-button" id="createOrganizationTopButton" type="button" hidden>Opprett organisasjon</button>
+          <label class="language-control" for="languageSelect" title="Språk">
+            <svg class="language-symbol" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20"></path></svg>
+            <span class="sr-only">Språk</span>
+            <select id="languageSelect" data-language-select aria-label="Språk"><option value="no">Norsk</option><option value="en">English</option></select>
+          </label>
+          <button class="icon-button" id="profileButton" type="button" title="Profil" aria-label="Åpne profil">?</button>
+        </div>
+      </header>
+
+      <aside class="sidebar">
+        <nav class="primary-nav" aria-label="Hovedmeny">
+          <button class="active" type="button" data-view="overview"><span>Oversikt</span></button>
+          <button type="button" data-view="assignments"><span id="assignmentsNavLabel">Oppdrag</span><b id="assignmentCount">0</b></button>
+          <button type="button" data-view="documentation"><span>Arkiv</span><b id="documentCount">0</b></button>
+        </nav>
+        <section class="sidebar-jobs" id="sidebarJobsSection" aria-labelledby="sidebarJobsTitle">
+          <div class="sidebar-jobs-header">
+            <span class="label" id="sidebarJobsTitle">Mine oppdrag</span>
+            <button class="sidebar-jobs-all" type="button" data-view-link="assignments" aria-label="Se alle oppdrag">Se alle</button>
+          </div>
+          <p>Velg et oppdrag for å fortsette arbeidet.</p>
+          <div class="sidebar-assignment-list" id="sidebarAssignments"></div>
+        </section>
+        <div class="sidebar-context" hidden>
+          <span class="label">Aktiv rolle</span>
+          <strong id="activeRole">Ingen organisasjon</strong>
+        </div>
+        <div class="sidebar-footer"><p id="policyVersion">Kildepakke ikke lastet</p><button class="sidebar-settings" id="settingsButton" type="button" data-view="settings">Innstillinger</button><span class="midnight-network" id="syncState" role="status" title="Midnight aktivert på preprod"><img src="/static/midnight-logo-dark.svg" alt="" /><strong>preprod</strong><i aria-hidden="true"></i></span><a class="logout-link" href="/logout">Logg ut</a></div>
+      </aside>
+
+      <main class="main-content">
+        <section class="view active" id="overviewView" aria-labelledby="overviewTitle">
+          <div class="page-header">
+            <div><h1 id="overviewTitle">Oversikt</h1></div>
+            <button class="primary" id="newAssignmentButton" type="button">Nytt oppdrag</button>
+          </div>
+          <div class="metric-row" id="metricRow"></div>
+          <div class="dashboard-columns" id="overviewColumns">
+            <section class="work-section" id="availableWorkSection" aria-labelledby="availableWorkTitle">
+              <div class="section-header"><div><h2 id="availableWorkTitle">Ledige oppdrag</h2></div><button class="text-button" type="button" data-assignment-filter-link="available">Se alle</button></div>
+              <div class="assignment-list" id="availableAssignments"></div>
+            </section>
+            <section class="work-section" id="myWorkSection" aria-labelledby="myWorkTitle">
+              <div class="section-header"><div><h2 id="myWorkTitle">Tildelt meg</h2><p>Oppdrag som krever planlegging eller svar.</p></div></div>
+              <div class="assignment-list" id="myAssignments"></div>
+            </section>
+            <section class="work-section" id="reviewQueueSection" aria-labelledby="reviewQueueTitle">
+              <div class="section-header"><div><h2 id="reviewQueueTitle">Til vurdering</h2><p>Planer og sluttkontroller som må godkjennes før dokumentpakken kan utstedes og forankres.</p></div></div>
+              <div class="assignment-list" id="reviewQueue"></div>
+            </section>
+          </div>
+          <section class="work-section" id="providedAssignmentsSection" aria-labelledby="providedTitle">
+            <div class="section-header"><div><h2 id="providedTitle">Aktive oppdrag</h2></div><button class="text-button" type="button" data-view-link="assignments">Se alle</button></div>
+            <div class="assignment-list compact" id="providedAssignments"></div>
+          </section>
+        </section>
+
+        <section class="view" id="assignmentsView" aria-labelledby="assignmentsTitle">
+          <div class="page-header">
+            <div><h1 id="assignmentsTitle">Oppdrag</h1></div>
+            <button class="primary" id="newAssignmentListButton" type="button">Nytt oppdrag</button>
+          </div>
+          <div class="filter-row" role="group" aria-label="Filtrer oppdrag">
+            <button class="active" type="button" data-filter="all">Alle</button>
+            <button type="button" data-filter="available">Ledige</button>
+            <button type="button" data-filter="mine">Tildelt meg</button>
+            <button type="button" data-filter="review">Til vurdering</button>
+            <button type="button" data-filter="closed">Avsluttet</button>
+          </div>
+          <div class="assignment-list" id="allAssignments"></div>
+        </section>
+
+        <section class="view" id="membersView" aria-labelledby="membersTitle">
+          <div class="page-header">
+            <div><span class="eyebrow">Organisasjon</span><h1 id="membersTitle">Organisasjon og personer</h1></div>
+            <div class="page-actions"><button class="secondary" id="editProfileButton" type="button">Rediger profil</button><button class="secondary" id="editOrganizationButton" type="button">Rediger organisasjon</button><button class="primary" id="inviteMemberButton" type="button">Inviter person</button></div>
+          </div>
+          <section class="organization-summary" id="organizationSummary" aria-label="Organisasjonsopplysninger"></section>
+          <div class="member-directory">
+            <section class="member-list-panel" aria-labelledby="memberListTitle"><div class="section-header"><div><h2 id="memberListTitle">Medlemmer</h2><p>Velg en person for å se tilknyttede oppdrag og dokumentasjon.</p></div></div><div class="member-list" id="memberList"></div></section>
+            <section class="member-detail" id="memberDetail" aria-live="polite"><div class="empty-state">Velg en person for å se detaljer.</div></section>
+          </div>
+        </section>
+
+        <section class="view" id="documentationView" aria-labelledby="documentationTitle">
+          <div class="page-header">
+            <div><span class="eyebrow">Sikker dokumentasjon</span><h1 id="documentationTitle">Kunde- og oppdragsarkiv</h1></div>
+          </div>
+          <div class="assurance-strip" aria-label="Beskyttelsesnivå">
+            <div><span>Innhold</span><strong>Privat i esense</strong><p>Rapporter og personopplysninger sendes ikke til blokkjeden.</p></div>
+            <div><span>Tilgang</span><strong>Formål og mottaker</strong><p>Eier, ny virksomhet eller myndighet får avgrenset tilgang.</p></div>
+            <div><span>Integritet</span><strong>Lokalt signert</strong><p>Endringer oppdages ved kontroll av dokumentkvitteringen.</p></div>
+            <div class="midnight-assurance"><span><span class="midnight-mark" tabindex="0" aria-label="Midnight-grense: bare dokumentforpliktelsen kan forankres. Rapportinnhold og personopplysninger forblir private, og ingen transaksjon hevdes før den er bekreftet." data-tooltip="Midnight-grense: bare dokumentforpliktelsen kan forankres. Rapportinnhold og personopplysninger forblir private, og ingen transaksjon hevdes før den er bekreftet."><img src="/static/midnight-logo-dark.svg" alt="Midnight" /></span></span><strong id="documentationMidnightStatus">Ikke forankret</strong><p id="documentationMidnightDetail">Pilotstatus</p></div>
+          </div>
+          <div class="document-toolbar" aria-label="Filtrer dokumentasjon">
+            <label><span>Søk</span><input id="documentSearchInput" type="search" placeholder="Kunde, mottaker eller dokument" /></label>
+            <label><span>Kunde eller anlegg</span><select id="documentCustomerFilter"><option value="">Alle kunder og anlegg</option></select></label>
+            <label><span>Midnight-status</span><select id="documentMidnightFilter"><option value="">Alle statuser</option><option value="confirmed">Forankret</option><option value="pending">Venter</option><option value="not_submitted">Ikke forankret</option><option value="revoked">Tilbakekalt</option></select></label>
+            <label><span>Sorter</span><select id="documentSortFilter"><option value="newest">Nyeste først</option><option value="oldest">Eldste først</option><option value="anchored">Forankret først</option></select></label>
+          </div>
+          <div class="document-summary" id="documentSummary"></div>
+          <section class="work-section" aria-labelledby="organizationDocumentsTitle">
+            <h2 class="sr-only" id="organizationDocumentsTitle">Arkiv</h2>
+            <div class="document-list" id="documentArchiveList"></div>
+          </section>
+        </section>
+
+        <section class="view" id="settingsView" aria-labelledby="settingsTitle">
+          <div class="page-header"><div><span class="eyebrow">Konto</span><h1 id="settingsTitle">Innstillinger</h1><p>Profil, organisasjon og tilgang samlet på ett sted.</p></div></div>
+          <div class="settings-tabs" role="tablist" aria-label="Innstillinger">
+            <button class="active" id="profileSettingsTab" type="button" role="tab" data-settings-tab="profile">Min profil</button>
+            <button id="organizationSettingsTab" type="button" role="tab" data-settings-tab="organization">Organisasjon</button>
+            <button id="accessSettingsTab" type="button" role="tab" data-settings-tab="access">Personer og tilgang</button>
+            <button id="sourceSettingsTab" type="button" role="tab" data-settings-tab="sources">Kildegrunnlag</button>
+          </div>
+          <section class="settings-panel active" id="profileSettingsPanel" data-settings-panel="profile">
+            <div class="settings-panel-heading"><div><span class="eyebrow">Profilinformasjon</span><h2>Min profil</h2><p>Opplysningene brukes i oppdrag, dokumentasjon og organisasjonens personoversikt.</p></div></div>
+            <form class="settings-form" id="profileForm">
+              <div class="field wide"><label for="profileEmailDisplay">E-post for innlogging</label><input id="profileEmailDisplay" type="email" readonly /><small>E-postadressen kommer fra innloggingen og kan ikke endres her.</small></div>
+              <div class="field wide"><label for="displayNameInput">Navn</label><input id="displayNameInput" required /></div>
+              <div class="field wide"><label for="roleTitleInput">Stilling eller fagrolle</label><input id="roleTitleInput" placeholder="Lærer, elektriker, ekomtekniker ..." /><small>Dette beskriver arbeidet ditt. Tilgang styres av organisasjonsroller under Personer og tilgang.</small></div>
+              <div class="field"><label for="primaryFamilyInput">Primærfag</label><select id="primaryFamilyInput"><option value="">Ikke valgt</option><option value="electro">Elektro</option><option value="ekom">Ekom</option><option value="both">Elektro og ekom</option></select></div>
+              <div class="field"><label for="phoneInput">Telefon</label><input id="phoneInput" /></div>
+              <div class="settings-actions wide"><button class="primary" type="submit">Lagre profil</button></div>
+            </form>
+            <div class="settings-role-summary">
+              <div><span class="eyebrow">Arbeidsflate</span><h3 id="workspaceMode">Oppdrag</h3></div>
+              <div><span class="eyebrow">Roller i organisasjonen</span><strong id="settingsActiveRole">Ingen organisasjon</strong></div>
+            </div>
+          </section>
+          <section class="settings-panel" id="organizationSettingsPanel" data-settings-panel="organization" hidden>
+            <div class="settings-panel-heading"><div><span class="eyebrow">Organisasjonsopplysninger</span><h2>Organisasjon</h2><p>Opplysningene er synlige for medlemmer i organisasjonen.</p></div></div>
+            <form class="settings-form" id="organizationSettingsForm">
+              <div class="field wide"><label for="organizationSettingsName">Navn</label><input id="organizationSettingsName" required /></div>
+              <div class="field"><label for="organizationSettingsType">Type</label><select id="organizationSettingsType"><option value="school">Skole</option><option value="enterprise">Virksomhet</option><option value="other">Annet</option></select></div>
+              <div class="field"><label for="organizationNumberInput">Organisasjonsnummer</label><input id="organizationNumberInput" /></div>
+              <div class="field wide"><label for="organizationAddressInput">Adresse</label><input id="organizationAddressInput" /></div>
+              <div class="field"><label for="organizationContactEmailInput">Kontakt-e-post</label><input id="organizationContactEmailInput" type="email" /></div>
+              <div class="field"><label for="organizationPhoneInput">Telefon</label><input id="organizationPhoneInput" /></div>
+              <div class="settings-actions wide"><button class="primary" type="submit">Lagre organisasjon</button></div>
+            </form>
+          </section>
+          <section class="settings-panel" id="accessSettingsPanel" data-settings-panel="access" hidden>
+            <div class="settings-panel-heading"><div><span class="eyebrow">Personer og tilgang</span><h2>Medlemmer i organisasjonen</h2><p>Inviter personer, se roller og følg opp deres oppdrag og dokumentasjon.</p></div></div>
+            <div class="settings-access-row"><div><strong id="settingsMemberCount">0 medlemmer</strong><p>Roller bestemmer hvilke organisatoriske funksjoner personen kan bruke.</p></div><button class="primary" type="button" data-view-link="members">Administrer personer</button></div>
+          </section>
+          <section class="settings-panel" id="sourceSettingsPanel" data-settings-panel="sources" hidden>
+            <div class="settings-panel-heading"><div><span class="eyebrow">Faglig grunnlag</span><h2>Kildegrunnlag</h2><p>Versjonerte kilder som kan gi planleggingshensyn. De erstatter ikke kontroll av gjeldende tekst eller faglig vurdering.</p></div></div>
+            <div class="source-settings-content">
+              <div class="source-summary" id="sourceSummary"></div>
+              <div class="notice warning"><strong>Utkast til faglig gjennomgang</strong><p>Kildepakken må godkjennes og vedlikeholdes av kvalifiserte fagpersoner før den brukes som produksjonsgrunnlag.</p></div>
+            </div>
+          </section>
+        </section>
+
+        <section class="view assignment-workspace" id="assignmentView" aria-labelledby="assignmentTitle">
+          <button class="back-button" id="backButton" type="button">Tilbake til oppdrag</button>
+          <div class="assignment-heading">
+            <div class="assignment-heading-main"><h1 id="assignmentTitle" translate="no">Oppdrag</h1></div>
+            <div class="assignment-heading-context">
+              <a class="assignment-location-link" id="assignmentLocationLink" target="_blank" rel="noopener" hidden><span id="assignmentLocation" translate="no"></span><span class="google-maps-mark" aria-hidden="true">G</span><span class="sr-only">Google Maps</span></a>
+              <div class="assignment-heading-actions" id="assignmentHeadingActions"></div>
+              <span class="status-badge" id="assignmentStatus"></span>
+            </div>
+          </div>
+          <div class="assignment-step-progress" id="assignmentSteps" aria-live="polite">
+            <div><span id="assignmentStepCounter">Steg 01 av 05</span><strong id="assignmentStepTitle">Oppdrag</strong></div>
+            <div class="assignment-progress-track" aria-hidden="true"><span id="assignmentProgressFill"></span></div>
+          </div>
+          <div class="assignment-layout">
+            <aside class="assignment-summary" id="assignmentSummary"></aside>
+            <div class="assignment-main">
+              <section class="detail-section" id="assignmentBriefSection" data-assignment-step="1">
+                <div class="section-header"><div><span class="step-label">01</span><h2>Oppdragsgrunnlag</h2><p>Kontroller hva som er kjent, antatt og forventet.</p></div></div>
+                <div class="assignment-description"><p id="assignmentPurpose" translate="no"></p></div>
+                <div class="brief-grid" id="assignmentBrief"></div>
+                <div class="action-row" id="acceptanceActions"></div>
+              </section>
+
+              <section class="detail-section" id="planningSection" data-assignment-step="2">
+                <div class="section-header"><div><span class="step-label">02</span><h2>Ansvar og planlegging</h2><p>Avklar ansvar, arbeidsmetode og risikotiltak før planen sendes til godkjenning.</p></div><span class="save-label" id="draftSaveState">Ikke lagret</span></div>
+                <aside class="assistant-strip" id="assistantPanel" aria-label="Dokumentasjonshjelper"></aside>
+                <form class="planning-form" id="planningForm">
+                  <div class="field wide"><label for="workDescription">Forstått arbeidsomfang</label><textarea id="workDescription" name="work_description" placeholder="Beskriv hva du mener skal utføres, grensesnitt og hva som ikke inngår."></textarea></div>
+                  <div class="field"><label for="buildingType">Bygg eller anleggstype</label><select id="buildingType" name="building_type"><option value="">Ikke avklart</option><option value="bolig">Bolig</option><option value="naering">Næringsbygg</option><option value="industri">Industri</option><option value="utendors">Utendørs</option><option value="annet">Annet</option></select></div>
+                  <div class="field"><label for="constructionSite">Bygge- eller anleggsplass</label><select id="constructionSite" name="construction_site"><option value="unknown">Må avklares</option><option value="yes">Ja</option><option value="no">Nei</option></select></div>
+                  <div class="field"><label for="energizedProximity">Arbeid på eller nær elektrisk anlegg</label><select id="energizedProximity" name="energized_proximity"><option value="unknown">Må avklares</option><option value="yes">Ja</option><option value="no">Nei</option></select></div>
+                  <div class="field"><label for="responsibilityCheck">Ansvar, anleggseier og lokale instrukser</label><textarea id="responsibilityCheck" name="responsibility_check" placeholder="Hvem er eier eller driftsansvarlig, hvilken virksomhet tar oppdraget, hvem er ansvarlig for arbeidet, og hvilke lokale instrukser gjelder?"></textarea></div>
+                  <div class="field wide"><label for="workMethod">Planlagt arbeidsmetode</label><textarea id="workMethod" name="work_method" placeholder="Beskriv rekkefølge, frakobling, sikring, tilgang og koordinering."></textarea></div>
+                  <div class="field wide"><label for="riskControls">Farer og risikoreduserende tiltak</label><textarea id="riskControls" name="risk_controls" placeholder="Identifiser farer og tiltak som må være på plass før arbeidet starter."></textarea></div>
+                  <div class="field"><label for="toolsMaterials">Verktøy, materiell og underlag</label><textarea id="toolsMaterials" name="tools_materials" placeholder="Hva må velges, skaffes eller kontrolleres?"></textarea></div>
+                  <div class="field"><label for="testsEvidence">Prøving og dokumentasjon</label><textarea id="testsEvidence" name="tests_and_evidence" placeholder="Planlagte målinger, tester, bilder, sjekklister og leveranser."></textarea></div>
+                  <div class="field wide"><label for="openQuestions">Åpne spørsmål før utførelse</label><textarea id="openQuestions" name="open_questions" placeholder="Hva mangler, hvem må svare, og hva må avklares før start?"></textarea></div>
+                </form>
+                <div class="action-row"><button class="secondary" id="saveDraftButton" type="button">Lagre arbeidskopi</button></div>
+              </section>
+
+              <section class="detail-section" id="considerationsSection" data-assignment-step="3">
+                <div class="section-header"><div><span class="step-label">03</span><h2>Krav og sikkerhet</h2><p>Kontroller relevante kilder, sikkerhetsforutsetninger og den frosne planversjonen før arbeid starter.</p></div><span class="version-label" id="considerationVersion"></span></div>
+                <div class="consideration-list" id="considerationList"></div>
+                <div class="workflow-gate">
+                  <div class="section-header"><div><span class="eyebrow">Godkjenningspunkt</span><h3>Planversjon før utførelse</h3><p>Innsending fryser planen. Arbeidet går ikke videre før versjonen er vurdert.</p></div></div>
+                  <div class="submission-list" id="submissionList"></div>
+                  <div class="action-row" id="submissionActions"></div>
+                </div>
+              </section>
+
+              <section class="detail-section" id="executionSection" data-assignment-step="4">
+                <div class="section-header"><div><span class="step-label">04</span><h2>Utførelse og sluttkontroll</h2><p>Registrer hva som faktisk ble gjort, hvordan arbeidet ble avsluttet sikkert, og hvilke kontroller som bekrefter resultatet.</p></div><span class="save-label" id="completionSaveState">Ikke startet</span></div>
+                <div class="evidence-panel">
+                  <div class="section-header"><div><span class="eyebrow">Sporbar tidslinje</span><h3>Dokumentasjon i oppdraget</h3><p>Hvert element får automatisk tidspunkt, filhash og en uforanderlig lokal forpliktelse.</p></div><button class="secondary" id="addEvidenceButton" type="button">Legg til dokumentasjon</button></div>
+                  <div class="evidence-timeline" id="evidenceTimeline"></div>
+                </div>
+                <div id="executionFormPanel">
+                  <form class="planning-form" id="completionForm">
+                    <div class="field wide"><label for="completionWorkPerformed">Utført arbeid</label><textarea id="completionWorkPerformed" name="work_performed" placeholder="Beskriv faktisk omfang, endringer fra planen og resultatet som ble levert."></textarea></div>
+                    <div class="field wide"><label for="completionSafeClosure">Sikker avslutning</label><textarea id="completionSafeClosure" name="safe_closure" placeholder="Beskriv frakobling, rydding, gjeninnkobling, merking og hvordan anlegget ble satt i forsvarlig stand."></textarea></div>
+                    <div class="field wide"><label for="completionTestsResults">Prøving, målinger og kontrollresultater</label><textarea id="completionTestsResults" name="tests_and_results" placeholder="Oppgi gjennomførte kontroller, måleresultater og akseptkriterier."></textarea></div>
+                    <div class="field"><label for="completionDeviations">Avvik eller gjenstående arbeid</label><textarea id="completionDeviations" name="deviations" placeholder="Skriv «Ingen registrerte» når det er riktig."></textarea></div>
+                    <div class="field"><label for="completionEvidence">Dokumentasjon og vedlegg</label><textarea id="completionEvidence" name="evidence_references" placeholder="Oppgi bilder, skjema, målefiler, kursfortegnelse, produktdata eller andre vedlegg."></textarea></div>
+                    <div class="field wide"><label for="completionHandover">Merknad til overlevering</label><textarea id="completionHandover" name="handover_notes" placeholder="Videre oppfølging, drift, vedlikehold eller informasjon til eier."></textarea></div>
+                  </form>
+                  <div class="action-row"><button class="secondary" id="saveCompletionButton" type="button">Lagre utførelsesregistrering</button></div>
+                </div>
+                <div class="workflow-gate completion-gate">
+                  <div class="section-header"><div><span class="eyebrow">Godkjenningspunkt</span><h3>Utførelse og sluttkontroll</h3><p>Den innsendte registreringen må vurderes før dokumentasjonen kan utstedes.</p></div></div>
+                  <div class="submission-list" id="completionSubmissionList"></div>
+                  <div class="action-row" id="completionActions"></div>
+                </div>
+              </section>
+
+              <section class="detail-section" id="documentSection" data-assignment-step="5">
+                <div class="section-header"><div><span class="step-label">05</span><h2>Dokumentasjon og overlevering</h2><p>Frys en godkjent versjon, overlever til eier og gi senere mottakere avgrenset tilgang.</p></div><span class="version-label midnight-version"><span class="midnight-mark" tabindex="0" aria-label="Midnight-grense: bare dokumentforpliktelsen kan forankres. Rapportinnhold og personopplysninger forblir private, og ingen transaksjon hevdes før den er bekreftet." data-tooltip="Midnight-grense: bare dokumentforpliktelsen kan forankres. Rapportinnhold og personopplysninger forblir private, og ingen transaksjon hevdes før den er bekreftet."><img src="/static/midnight-logo-dark.svg" alt="Midnight" /></span><span>Midnight er valgfritt</span></span></div>
+                <div class="document-readiness" id="documentReadiness"></div>
+                <div class="document-list" id="assignmentDocumentList"></div>
+                <div class="action-row" id="documentActions"></div>
+              </section>
+              <div class="step-navigation" id="assignmentStepNavigation"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="view empty-organization" id="emptyOrganizationView" aria-labelledby="emptyOrganizationTitle">
+          <div><span class="brand-mark large">e</span><span class="eyebrow">Første oppsett</span><h1 id="emptyOrganizationTitle">Opprett organisasjonen</h1><p>Dette blir ditt private arbeidsområde. Etterpå kan du invitere personer og opprette det første oppdraget.</p><button class="primary" id="createFirstOrganizationButton" type="button">Opprett organisasjon</button></div>
+        </section>
+      </main>
+    </div>
+
+    <dialog class="dialog" id="organizationDialog">
+      <form id="organizationForm">
+        <div class="dialog-header"><div><span class="eyebrow">Organisasjon</span><h2>Opprett arbeidsområde</h2><p>Dette kan være en skole, lærebedrift eller annen virksomhet.</p></div><button class="close-button" type="button" data-close="organizationDialog" aria-label="Lukk">×</button></div>
+        <div class="dialog-body form-grid"><div class="field wide"><label for="organizationName">Navn</label><input id="organizationName" required /></div><div class="field wide"><label for="organizationType">Type</label><select id="organizationType"><option value="school">Skole</option><option value="enterprise">Virksomhet</option><option value="other">Annet</option></select></div></div>
+        <div class="dialog-actions"><button class="secondary" type="button" data-close="organizationDialog">Avbryt</button><button class="primary" type="submit">Opprett</button></div>
+      </form>
+    </dialog>
+
+    <dialog class="dialog" id="memberDialog">
+      <form id="memberForm">
+        <div class="dialog-header"><div><span class="eyebrow">Personer</span><h2>Inviter til organisasjonen</h2><p>Lag én tidsbegrenset lenke som kan deles direkte eller skannes.</p></div><button class="close-button" type="button" data-close="memberDialog" aria-label="Lukk">×</button></div>
+        <div class="dialog-body invite-dialog-body">
+          <div class="invite-explainer"><strong>Ny person blir medlem uten arbeidsroller</strong><p>En administrator velger senere om personen er leder, tekniker, oppdragsgiver eller kontrollør. Medlemskap gir ikke tilgang til kundedata eller rapporter.</p></div>
+          <div class="invite-link-result" id="inviteLinkResult" hidden>
+            <img class="invite-qr" id="inviteQrImage" alt="QR-kode for invitasjonslenke" />
+            <div class="invite-link-copy"><span>Invitasjonslenke</span><input id="inviteLinkInput" readonly /><small id="inviteLinkExpiry"></small><div><button class="secondary" id="copyInviteLinkButton" type="button">Kopier lenke</button><button class="text-danger" id="revokeInviteLinkButton" type="button">Trekk tilbake</button></div></div>
+          </div>
+          <div class="report-access-note"><span class="midnight-mark" tabindex="0" data-tooltip="Selektiv deling gjelder en bestemt utstedt rapport, ikke medlemskapet i organisasjonen."><img src="/static/midnight-logo-dark.svg" alt="Midnight" /></span><p>Kunder, eiere og tilsyn trenger normalt ikke medlemskap. De får eksplisitt og tilbakekallbar tilgang til en bestemt rapport fra arkivet.</p></div>
+        </div>
+        <div class="dialog-actions"><button class="secondary" type="button" data-close="memberDialog">Lukk</button><button class="primary" id="createInviteLinkButton" type="submit">Lag invitasjonslenke</button></div>
+      </form>
+    </dialog>
+
+    <dialog class="dialog" id="memberRoleDialog">
+      <form id="memberRoleForm">
+        <div class="dialog-header"><div><span class="eyebrow">Tilgang</span><h2 id="memberRoleDialogTitle">Administrer roller</h2><p>Rollene styrer hvilke arbeidsfunksjoner personen kan bruke. Rapporttilgang deles separat.</p></div><button class="close-button" type="button" data-close="memberRoleDialog" aria-label="Lukk">×</button></div>
+        <div class="dialog-body">
+          <fieldset class="field wide role-options stacked-role-options"><legend>Organisasjonsroller</legend><label><input type="checkbox" name="managedMemberRole" value="admin" /> <span><strong>Leder</strong><small>Organisasjon, personer og tilgang</small></span></label><label><input type="checkbox" name="managedMemberRole" value="worker" /> <span><strong>Tekniker</strong><small>Ledige og tildelte oppdrag</small></span></label><label><input type="checkbox" name="managedMemberRole" value="task_provider" /> <span><strong>Oppdragsgiver</strong><small>Opprette og følge opp oppdrag</small></span></label><label><input type="checkbox" name="managedMemberRole" value="reviewer" /> <span><strong>Kontrollør</strong><small>Vurdere plan, sluttkontroll og utstedelse</small></span></label></fieldset>
+          <p class="member-neutral-note">Ingen valgte roller betyr et nøytralt medlemskap uten tilgang til oppdrag.</p>
+        </div>
+        <div class="dialog-actions"><button class="secondary" type="button" data-close="memberRoleDialog">Avbryt</button><button class="primary" type="submit">Lagre roller</button></div>
+      </form>
+    </dialog>
+
+    <dialog class="dialog wide-dialog" id="assignmentDialog">
+      <form id="assignmentForm">
+        <div class="dialog-header"><div><span class="eyebrow" id="assignmentDialogEyebrow">Nytt oppdrag</span><h2 id="assignmentDialogTitle">Definer oppdraget</h2><p id="assignmentDialogIntro">Skill mellom kjente fakta, antakelser og det den tildelte personen må avklare.</p></div><button class="close-button" type="button" data-close="assignmentDialog" aria-label="Lukk">×</button></div>
+        <div class="dialog-body form-grid">
+          <div class="field wide"><label for="assignmentTitleInput">Tittel</label><input id="assignmentTitleInput" required placeholder="For eksempel: Planlegg ny kurs og nettverkspunkt i verksted" /></div>
+          <fieldset class="field wide family-options"><legend>Omfatter</legend><label><input type="checkbox" name="workFamily" value="electro" checked /> Elektro</label><label><input type="checkbox" name="workFamily" value="ekom" /> Ekom</label></fieldset>
+          <div class="field wide"><label for="assignmentPurposeInput">Formål og oppgave</label><textarea id="assignmentPurposeInput" required></textarea></div>
+          <div class="field"><label for="knownScopeInput">Kjent omfang</label><textarea id="knownScopeInput"></textarea></div>
+          <div class="field"><label for="knownConstraintsInput">Kjente begrensninger</label><textarea id="knownConstraintsInput"></textarea></div>
+          <div class="field wide"><label for="customerInput">Kunde eller anlegg</label><select id="customerInput" required><option value="">Velg kunde eller anlegg</option><option value="__new__">+ Registrer ny kunde</option></select></div>
+          <div class="customer-new-fields field wide" id="newCustomerFields" hidden><div class="field"><label for="newCustomerNameInput">Kundenavn</label><input id="newCustomerNameInput" /></div><div class="field"><label for="newCustomerAddressInput">Adresse eller anlegg</label><input id="newCustomerAddressInput" /></div></div>
+          <div class="field wide" id="assignmentAssigneeField"><label for="assigneesInput">Tildeles <span class="optional-label">valgfritt</span></label><select id="assigneesInput"><option value="">Ikke tildelt – tilgjengelig for arbeidstakere</option></select><small>Et ledig oppdrag kan tas av en arbeidstaker eller tildeles av en leder senere. Tidspunktet registreres automatisk.</small></div>
+        </div>
+        <div class="dialog-actions"><button class="secondary" type="button" data-close="assignmentDialog">Avbryt</button><button class="primary" id="assignmentSubmitButton" type="submit">Publiser oppdrag</button></div>
+      </form>
+    </dialog>
+
+    <dialog class="dialog" id="lateAssignmentDialog">
+      <form id="lateAssignmentForm">
+        <div class="dialog-header"><div><span class="eyebrow">Oppdrag</span><h2>Arbeidslag og AFA</h2><p>Flere teknikere kan registrere dokumentasjon. Én av dem må være AFA.</p></div><button class="close-button" type="button" data-close="lateAssignmentDialog" aria-label="Lukk">×</button></div>
+        <div class="dialog-body team-dialog-body">
+          <fieldset class="field team-fieldset"><legend>Arbeidslag</legend><div class="team-options" id="assignmentTeamOptions"></div></fieldset>
+          <div class="field"><label for="professionalResponsibleInput">AFA / faglig ansvarlig</label><select id="professionalResponsibleInput"><option value="">Velg AFA</option></select><small>AFA må være en del av arbeidslaget.</small></div>
+        </div>
+        <div class="dialog-actions"><button class="secondary" type="button" data-close="lateAssignmentDialog">Avbryt</button><button class="primary" id="confirmLateAssignmentButton" type="submit">Lagre arbeidslag</button></div>
+      </form>
+    </dialog>
+
+    <dialog class="dialog" id="evidenceDialog">
+      <form id="evidenceForm" enctype="multipart/form-data">
+        <div class="dialog-header"><div><span class="eyebrow">Dokumentasjon</span><h2>Registrer i tidslinjen</h2><p>Tidspunkt, registrert person, filhash og forpliktelse opprettes av systemet og kan ikke redigeres etterpå.</p></div><button class="close-button" type="button" data-close="evidenceDialog" aria-label="Lukk">×</button></div>
+        <div class="dialog-body form-grid">
+          <div class="field"><label for="evidencePhaseInput">Når i arbeidet</label><select id="evidencePhaseInput" required><option value="before">Før arbeidet starter</option><option value="during">Under utførelsen</option><option value="after">Etter arbeidet</option></select></div>
+          <div class="field"><label for="evidenceTypeInput">Type</label><select id="evidenceTypeInput" required><option value="photo">Bilde</option><option value="measurement">Måleresultat</option><option value="checklist">Sjekkliste</option><option value="declaration">Erklæring eller skjema</option><option value="product_data">Produktdata / FDV</option><option value="drawing">Tegning</option><option value="other">Annet</option></select></div>
+          <div class="field wide"><label for="evidenceTitleInput">Tittel</label><input id="evidenceTitleInput" required placeholder="For eksempel: Risikovurdering før oppstart" /></div>
+          <div class="field wide"><label for="evidenceFileInput">Fil</label><input id="evidenceFileInput" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,.txt,.csv,.xlsx,.xls,.docx,.odt,.zip" /><small>Maksimalt 10 MB. Filen forblir privat i esense.</small></div>
+          <div class="field wide"><label for="evidenceNoteInput">Merknad</label><textarea id="evidenceNoteInput" placeholder="Kort forklaring eller referanse. Påkrevd når ingen fil legges ved."></textarea></div>
+        </div>
+        <div class="dialog-actions"><button class="secondary" type="button" data-close="evidenceDialog">Avbryt</button><button class="primary" type="submit">Registrer dokumentasjon</button></div>
+      </form>
+    </dialog>
+
+    <dialog class="dialog" id="reviewDialog">
+      <form id="reviewForm">
+        <div class="dialog-header"><div><span class="eyebrow">Vurder plan</span><h2 id="reviewDialogTitle">Versjon</h2><p>Vurder kun den innsendte versjonen. Arbeidskopien er ikke tilgjengelig.</p></div><button class="close-button" type="button" data-close="reviewDialog" aria-label="Lukk">×</button></div>
+        <div class="dialog-body form-grid">
+          <div class="field wide"><label for="reviewDecision">Beslutning</label><select id="reviewDecision"><option value="returned">Returner for retting</option><option value="accepted">Godta forberedelsesplan</option></select></div>
+          <div class="field wide"><label for="reviewSummary">Oppsummering</label><textarea id="reviewSummary" required></textarea></div>
+          <div class="field wide"><label for="reviewFindings">Funn, ett per linje</label><textarea id="reviewFindings" placeholder="Manglende avklaring ...&#10;Kontroller kilde ..."></textarea></div>
+        </div>
+        <div class="dialog-actions"><button class="secondary" type="button" data-close="reviewDialog">Avbryt</button><button class="primary" type="submit">Lagre vurdering</button></div>
+      </form>
+    </dialog>
+
+    <dialog class="dialog" id="completionReviewDialog">
+      <form id="completionReviewForm">
+        <div class="dialog-header"><div><span class="eyebrow">Vurder utførelse</span><h2 id="completionReviewDialogTitle">Utførelsesversjon</h2><p>Vurder den innsendte registreringen av utførelse, sikker avslutning og sluttkontroll.</p></div><button class="close-button" type="button" data-close="completionReviewDialog" aria-label="Lukk">×</button></div>
+        <div class="dialog-body form-grid">
+          <div class="field wide"><label for="completionReviewDecision">Beslutning</label><select id="completionReviewDecision"><option value="returned">Returner for retting</option><option value="accepted">Godta utførelse og sluttkontroll</option></select></div>
+          <div class="field wide"><label for="completionReviewSummary">Oppsummering</label><textarea id="completionReviewSummary" required></textarea></div>
+          <div class="field wide"><label for="completionReviewFindings">Funn, ett per linje</label><textarea id="completionReviewFindings" placeholder="Manglende kontroll ...&#10;Vedlegg må avklares ..."></textarea></div>
+        </div>
+        <div class="dialog-actions"><button class="secondary" type="button" data-close="completionReviewDialog">Avbryt</button><button class="primary" type="submit">Lagre vurdering</button></div>
+      </form>
+    </dialog>
+
+    <dialog class="dialog wide-dialog" id="documentPackageDialog">
+      <form id="documentPackageForm">
+        <div class="dialog-header"><div><span class="eyebrow">Utsted dokumentasjon</span><h2>Opprett en kontrollert dokumentasjonspakke</h2><p>Godkjent plan, utførelse og sluttkontroll fryses i en ny, sporbar versjon.</p></div><button class="close-button" type="button" data-close="documentPackageDialog" aria-label="Lukk">×</button></div>
+        <div class="dialog-body form-grid">
+          <div class="field wide"><label for="documentTitleInput">Tittel</label><input id="documentTitleInput" required /></div>
+          <div class="field"><label for="propertyReferenceInput">Anleggsreferanse</label><input id="propertyReferenceInput" required placeholder="Bygg, rom eller intern referanse" /></div>
+          <div class="field"><label for="ownerEmailInput">Eier eller dokumentmottaker</label><input id="ownerEmailInput" type="email" required /></div>
+          <div class="field wide package-source-note"><strong>Innhold hentes fra godkjent utførelsesregistrering</strong><p>Utført arbeid, kontrollresultater, avvik og vedleggsreferanser kan ikke endres under utstedelsen.</p></div>
+          <div class="field wide"><label for="ownerPurposeInput">Formål med eiertilgangen</label><input id="ownerPurposeInput" data-i18n-value value="Varig dokumentasjon for eier av anlegget" required /></div>
+        </div>
+        <div class="dialog-actions"><button class="secondary" type="button" data-close="documentPackageDialog">Avbryt</button><button class="primary" type="submit">Utsted pakke</button></div>
+      </form>
+    </dialog>
+
+    <dialog class="dialog" id="documentGrantDialog">
+      <form id="documentGrantForm">
+        <div class="dialog-header"><div><span class="eyebrow">Kontrollert deling</span><h2>Gi tilgang til dokumentasjon</h2><p>Tilgangen gjelder denne pakken og det oppgitte formålet.</p></div><button class="close-button" type="button" data-close="documentGrantDialog" aria-label="Lukk">×</button></div>
+        <div class="dialog-body form-grid">
+          <div class="field wide"><label for="grantEmailInput">Mottaker</label><input id="grantEmailInput" type="email" required /><small>Mottakeren logger inn med denne e-postadressen. Automatisk invitasjonsmail er ikke koblet til ennå.</small></div>
+          <div class="field"><label for="grantTypeInput">Tilgangstype</label><select id="grantTypeInput"><option value="contractor">Ny utførende virksomhet</option><option value="authority">Myndighet eller tilsyn</option><option value="owner">Eier</option></select></div>
+          <div class="field"><label for="grantExpiresInput">Utløper</label><input id="grantExpiresInput" type="date" /></div>
+          <div class="field wide"><label for="grantPurposeInput">Formål</label><textarea id="grantPurposeInput" required placeholder="For eksempel: prosjektering av endring i eksisterende anlegg."></textarea></div>
+        </div>
+        <div class="dialog-actions"><button class="secondary" type="button" data-close="documentGrantDialog">Avbryt</button><button class="primary" type="submit">Gi tilgang</button></div>
+      </form>
+    </dialog>
+
+    <dialog class="dialog wide-dialog" id="demoShareDialog">
+      <div class="dialog-header"><div><span class="eyebrow">Syntetisk delingsdemo</span><h2>Del en bekreftet rapport</h2><p>Prøv mottakerstyrt tilgang uten å sende e-post eller bruke virkelige personopplysninger.</p></div><button class="close-button" type="button" data-close="demoShareDialog" aria-label="Lukk">×</button></div>
+      <div class="dialog-body demo-share-body" id="demoShareContent"></div>
+      <div class="dialog-actions"><a class="secondary link-button" id="demoShareReportLink" href="/no/demo-report" target="_blank" rel="noopener">Åpne rapport</a><button class="secondary" type="button" data-close="demoShareDialog">Lukk</button></div>
+    </dialog>
+
+    <dialog class="dialog wide-dialog" id="demoRecipientDialog">
+      <div class="dialog-header"><div><span class="eyebrow">Mottakervisning</span><h2 id="demoRecipientTitle">Tilgang til dokumentasjon</h2><p>Dette er den avgrensede visningen mottakeren får etter innlogging med riktig identitet.</p></div><button class="close-button" type="button" data-close="demoRecipientDialog" aria-label="Lukk">×</button></div>
+      <div class="dialog-body demo-recipient-body" id="demoRecipientContent"></div>
+      <div class="dialog-actions"><a class="primary link-button" id="demoRecipientReportLink" href="/no/demo-report" target="_blank" rel="noopener">Åpne delt rapport</a><button class="secondary" type="button" data-close="demoRecipientDialog">Lukk</button></div>
+    </dialog>
+
+    <dialog class="dialog wide-dialog" id="documentDetailDialog">
+      <div class="dialog-header"><div><span class="eyebrow">Beskyttet dokumentasjon</span><h2 id="documentDetailTitle">Dokumentasjonspakke</h2><p>Innholdet vises bare til organisasjonen og mottakere med aktiv tilgang.</p></div><button class="close-button" type="button" data-close="documentDetailDialog" aria-label="Lukk">×</button></div>
+      <div class="dialog-body document-detail" id="documentDetailContent"></div>
+      <div class="dialog-actions"><button class="secondary" type="button" data-close="documentDetailDialog">Lukk</button></div>
+    </dialog>
+
+    <dialog class="dialog" id="verificationDialog">
+      <div class="dialog-header"><div><span class="eyebrow">Dokumentkontroll</span><h2>Kontroller dokumentkvittering</h2><p>Kontrollen sier noe om integritet og status, ikke om kvaliteten på det utførte arbeidet.</p></div><button class="close-button" type="button" data-close="verificationDialog" aria-label="Lukk">×</button></div>
+      <div class="dialog-body" id="verificationResult"></div>
+      <div class="dialog-actions"><button class="secondary" type="button" data-close="verificationDialog">Lukk</button></div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+    <script src="/static/i18n.js?v=20" defer></script>
+    <script src="/static/tooltips.js?v=2" defer></script>
+    <script src="/static/app.js?v=37" defer></script>
+  </body>
+</html>

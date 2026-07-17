@@ -1,0 +1,59 @@
+#!/bin/sh
+set -eu
+
+if [ "$(id -u)" -ne 0 ]; then
+  echo "This configuration command must run as root." >&2
+  exit 1
+fi
+
+contract_address="${1:-}"
+case "$contract_address" in
+  *[!0-9a-fA-F]*|'') echo "A hexadecimal Midnight contract address is required." >&2; exit 1 ;;
+esac
+[ "${#contract_address}" -eq 64 ] || { echo "The Midnight contract address must contain 64 hexadecimal characters." >&2; exit 1; }
+contract_address="$(printf '%s' "$contract_address" | tr '[:upper:]' '[:lower:]')"
+
+private_env=/etc/esense-midnight/preprod.env
+[ -f "$private_env" ] || { echo "The Preprod service identity is not initialized." >&2; exit 1; }
+production_env=/home/cardano/esense/.env
+[ -f "$production_env" ] || { echo "The esense production environment is missing." >&2; exit 1; }
+
+set_value() {
+  file="$1"
+  key="$2"
+  value="$3"
+  owner="$4"
+  group="$5"
+  mode="$6"
+  temporary="$(mktemp "${file}.XXXXXX")"
+  awk -v key="$key" -v value="$value" '
+    BEGIN { found = 0 }
+    index($0, key "=") == 1 { print key "=" value; found = 1; next }
+    { print }
+    END { if (!found) print key "=" value }
+  ' "$file" > "$temporary"
+  chown "$owner:$group" "$temporary"
+  chmod "$mode" "$temporary"
+  mv "$temporary" "$file"
+}
+
+worker_token="$(sed -n 's/^ESENSE_MIDNIGHT_WORKER_TOKEN=//p' "$private_env" | tail -n 1)"
+if [ -z "$worker_token" ]; then
+  worker_token="$(openssl rand -hex 32)"
+fi
+set_value "$private_env" MIDNIGHT_CONTRACT_ADDRESS "$contract_address" root root 0600
+set_value "$private_env" MIDNIGHT_PROOF_SERVER "http://127.0.0.1:6300" root root 0600
+set_value "$private_env" ESENSE_MIDNIGHT_WORKER_TOKEN "$worker_token" root root 0600
+set_value "$private_env" ESENSE_INTERNAL_URL "http://127.0.0.1:5000/api/internal/midnight" root root 0600
+set_value "$private_env" MIDNIGHT_WALLET_STATE_DIR "/var/lib/esense-midnight/state/wallet-cache" root root 0600
+set_value "$private_env" MIDNIGHT_SYNC_TIMEOUT_MS "21600000" root root 0600
+set_value "$private_env" MIDNIGHT_SYNC_CHECKPOINT_MS "300000" root root 0600
+
+set_value "$production_env" ESENSE_MIDNIGHT_ENABLED true cardano cardano 0600
+set_value "$production_env" ESENSE_MIDNIGHT_NETWORK preprod cardano cardano 0600
+set_value "$production_env" ESENSE_MIDNIGHT_CONTRACT_ADDRESS "$contract_address" cardano cardano 0600
+set_value "$production_env" ESENSE_MIDNIGHT_WORKER_TOKEN "$worker_token" cardano cardano 0600
+
+systemctl restart esense.service
+systemctl enable --now esense-midnight-worker.service
+echo "esense Midnight Preprod integration enabled."

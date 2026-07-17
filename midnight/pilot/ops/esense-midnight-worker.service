@@ -1,0 +1,22 @@
+[Unit]
+Description=esense Midnight Preprod receipt anchor worker
+After=network-online.target midnight-proof-server.service esense.service
+Wants=network-online.target midnight-proof-server.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/sbin/esense-midnight-pilot /opt/esense-midnight/app/src/anchor-worker.ts
+Restart=on-failure
+RestartSec=15s
+TimeoutStopSec=45s
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/esense-midnight
+RestrictSUIDSGID=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

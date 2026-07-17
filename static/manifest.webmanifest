@@ -1,0 +1,13 @@
+{
+  "name": "esense - profesjonell dokumentasjon",
+  "short_name": "esense",
+  "description": "Oppdrag, dokumentasjonshjelp, kontrollert overlevering og kildehensyn for elektro og ekom.",
+  "lang": "nb-NO",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f0502f",
+  "orientation": "any",
+  "icons": []
+}

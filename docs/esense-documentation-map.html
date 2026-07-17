@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Documentation and responsibility map for the current esense electrical and EKOM workload.">
+  <title>esense Documentation Map</title>
+  <style>
+    :root {
+      --ink: #182229;
+      --muted: #5d6a71;
+      --line: #d8e0e3;
+      --soft: #f3f7f6;
+      --paper: #fff;
+      --charcoal: #182127;
+      --teal: #087f72;
+      --teal-soft: #e4f3f0;
+      --blue: #2864a6;
+      --blue-soft: #eaf1fa;
+      --green: #26764d;
+      --green-soft: #e7f4eb;
+      --amber: #a36308;
+      --amber-soft: #fff3dc;
+      --red: #a13c3c;
+      --red-soft: #fbeaea;
+      --max: 1200px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--paper); }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.56;
+      letter-spacing: 0;
+    }
+
+    a { color: var(--blue); }
+    a:hover { color: #174a7f; }
+    code { font-family: "SFMono-Regular", Consolas, monospace; font-size: .9em; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      color: #fff;
+      background: var(--charcoal);
+      border-bottom: 3px solid var(--teal);
+    }
+
+    .topbar-inner {
+      width: min(var(--max), calc(100% - 32px));
+      min-height: 58px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand { color: #fff; font-weight: 780; text-decoration: none; white-space: nowrap; }
+    nav { display: flex; gap: 17px; overflow-x: auto; scrollbar-width: none; }
+    nav::-webkit-scrollbar { display: none; }
+    nav a { color: #dce7e9; font-size: 13px; text-decoration: none; white-space: nowrap; }
+    nav a:hover { color: #fff; }
+
+    header { background: #f8faf9; border-bottom: 1px solid var(--line); }
+    .hero, .wrap { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; }
+    .hero { padding: 62px 0 50px; }
+    .eyebrow { margin: 0 0 12px; color: var(--teal); font-size: 13px; font-weight: 780; text-transform: uppercase; }
+
+    h1, h2, h3 { margin-top: 0; line-height: 1.2; letter-spacing: 0; }
+    h1 { max-width: 920px; margin-bottom: 18px; font-size: clamp(35px, 5.5vw, 64px); }
+    h2 { margin-bottom: 18px; font-size: clamp(26px, 3vw, 38px); }
+    h3 { margin-bottom: 9px; font-size: 18px; }
+    .lede { max-width: 850px; margin: 0; color: #36444b; font-size: 20px; }
+
+    .meta-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+    .meta {
+      padding: 6px 10px;
+      background: #fff;
+      border: 1px solid #bdcbd0;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 680;
+    }
+
+    section { padding: 60px 0; border-bottom: 1px solid var(--line); }
+    section:nth-of-type(even) { background: var(--soft); }
+    .intro { max-width: 850px; margin: 0 0 28px; color: var(--muted); font-size: 17px; }
+
+    .banner {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(270px, 1fr);
+      gap: 20px;
+    }
+
+    .banner-main {
+      padding: 28px;
+      color: #fff;
+      background: var(--charcoal);
+      border-left: 6px solid var(--teal);
+      border-radius: 6px;
+      font-size: clamp(21px, 2.8vw, 32px);
+      font-weight: 720;
+      line-height: 1.32;
+    }
+
+    .banner-side { padding: 24px; background: var(--amber-soft); border: 1px solid #e5c58f; border-radius: 6px; }
+
+    .funnel {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .funnel-step {
+      position: relative;
+      min-height: 165px;
+      padding: 20px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-top: 5px solid var(--blue);
+      border-radius: 6px;
+    }
+    .funnel-step:nth-child(2) { border-top-color: var(--teal); }
+    .funnel-step:nth-child(3) { border-top-color: var(--green); }
+    .funnel-step:nth-child(4) { border-top-color: var(--amber); }
+    .funnel-step:nth-child(5) { border-top-color: var(--red); }
+    .funnel-step small { color: var(--muted); }
+
+    .output-strip {
+      margin-top: 16px;
+      padding: 18px 20px;
+      color: #075b52;
+      background: var(--teal-soft);
+      border: 1px solid #b8ddd6;
+      border-radius: 6px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .phase-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .phase {
+      padding: 20px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+    }
+
+    .phase-no {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      margin-bottom: 14px;
+      place-items: center;
+      color: #fff;
+      background: var(--teal);
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: 780;
+    }
+
+    .phase p { margin-bottom: 0; color: var(--muted); font-size: 14px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    th, td { padding: 14px 15px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+    th { color: #34434a; background: #edf3f2; font-size: 13px; font-weight: 780; }
+    tr:last-child td { border-bottom: 0; }
+    td small { display: block; margin-top: 5px; color: var(--muted); }
+
+    .tag {
+      display: inline-block;
+      margin: 2px 4px 2px 0;
+      padding: 3px 7px;
+      color: #33464d;
+      background: #edf2f3;
+      border-radius: 3px;
+      font-size: 12px;
+      font-weight: 680;
+    }
+
+    .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 15px; }
+    .card { padding: 21px; background: #fff; border: 1px solid var(--line); border-radius: 6px; }
+    .card p:last-child, .card ul:last-child { margin-bottom: 0; }
+    .kicker { display: block; margin-bottom: 7px; color: var(--teal); font-size: 12px; font-weight: 780; text-transform: uppercase; }
+
+    .example {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .package { padding: 24px; background: #fff; border: 1px solid var(--line); border-radius: 6px; }
+    .package.electrical { border-top: 5px solid var(--blue); }
+    .package.ekom { border-top: 5px solid var(--teal); }
+    .divider { display: grid; place-items: center; color: var(--muted); font-size: 25px; font-weight: 780; }
+
+    .callout { margin-top: 20px; padding: 20px 22px; background: var(--blue-soft); border-left: 5px solid var(--blue); border-radius: 6px; }
+    .warning { background: var(--red-soft); border-left-color: var(--red); }
+
+    .savings { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+    .saving { min-height: 155px; padding: 19px; background: #fff; border: 1px solid var(--line); border-radius: 6px; }
+    .saving strong { display: block; margin-bottom: 7px; color: var(--green); }
+    .saving span { color: var(--muted); font-size: 14px; }
+
+    .checklist { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 20px; padding: 0; list-style: none; }
+    .checklist li { position: relative; margin: 0; padding: 14px 14px 14px 42px; background: #fff; border: 1px solid var(--line); border-radius: 6px; }
+    .checklist li::before { content: ""; position: absolute; top: 18px; left: 16px; width: 12px; height: 12px; background: var(--teal); border-radius: 2px; }
+
+    .sources { display: grid; gap: 9px; padding: 0; list-style: none; }
+    .sources li { margin: 0; padding: 13px 15px; background: #fff; border-left: 4px solid var(--teal); }
+
+    footer { color: #cedadd; background: var(--charcoal); }
+    .footer-inner { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; padding: 32px 0; display: flex; justify-content: space-between; gap: 20px; font-size: 13px; }
+
+    @media (max-width: 920px) {
+      .funnel, .savings { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .phase-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 680px) {
+      .topbar-inner { align-items: flex-start; flex-direction: column; padding: 12px 0; }
+      nav { width: 100%; }
+      .hero { padding: 46px 0 40px; }
+      .lede { font-size: 18px; }
+      section { padding: 46px 0; }
+      .banner, .funnel, .phase-grid, .cards, .example, .savings, .checklist { grid-template-columns: 1fr; }
+      .divider { transform: rotate(90deg); min-height: 30px; }
+      table { font-size: 13px; }
+      th, td { padding: 11px; }
+      .footer-inner { flex-direction: column; }
+    }
+
+    @media print {
+      .topbar { display: none; }
+      section { padding: 32px 0; break-inside: avoid; }
+      a { color: inherit; text-decoration: underline; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#top">esense Documentation Map</a>
+      <nav aria-label="Document sections">
+        <a href="#routing">Routing</a>
+        <a href="#phases">Phases</a>
+        <a href="#responsibility">Responsibility</a>
+        <a href="#packs">Policy packs</a>
+        <a href="#example">Mixed job</a>
+        <a href="#efficiency">Time saving</a>
+        <a href="#governance">Governance</a>
+      </nav>
+    </div>
+  </div>
+
+  <header id="top">
+    <div class="hero">
+      <p class="eyebrow">Companion to the esense worker-first builder brief</p>
+      <h1>Documentation and responsibility map</h1>
+      <p class="lede">A background policy map for the current electrical and EKOM workload. It narrows the app to the responsibilities, questions, evidence and sources that apply to the worker, organization, exact task, site and work phase.</p>
+      <div class="meta-row">
+        <span class="meta">Planning draft v0.1</span>
+        <span class="meta">Electro + EKOM seed</span>
+        <span class="meta">No production legal decisions</span>
+        <a class="meta" href="esense-documentation-map.v0.1.json">Machine-readable map</a>
+        <a class="meta" href="esense-worker-first-suite-plan.html">Main suite plan</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="purpose">
+      <div class="wrap">
+        <div class="banner">
+          <div class="banner-main">The worker should see the next relevant action, not a library of regulations. The map stays in the background and explains why only when asked.</div>
+          <div class="banner-side"><strong>Design outcome</strong><br>The same map powers personal guidance, organization assignment, job checklists, evidence capture, handover and later selective proof.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="routing">
+      <div class="wrap">
+        <h2>How the app narrows the rule space</h2>
+        <p class="intro">A free-text job request is not enough. The app progressively establishes five kinds of context and loads policy packs only after the worker confirms the classification.</p>
+        <div class="funnel">
+          <article class="funnel-step"><h3>Person</h3><small>Verified and self-declared fagbrev, courses, practice, restrictions, role and expiry.</small></article>
+          <article class="funnel-step"><h3>Organization</h3><small>Employer, legal entity, active authorizations, registered scope, professional responsibility and coordination.</small></article>
+          <article class="funnel-step"><h3>Task</h3><small>Exact operation, discipline, system, new work, change, maintenance, test or inspection.</small></article>
+          <article class="funnel-step"><h3>Context</h3><small>Owner, assignment, building, worksite, environment, other trades, hazards and work method.</small></article>
+          <article class="funnel-step"><h3>Rule version</h3><small>Jurisdiction, effective date, official source, reviewed rule pack and unresolved uncertainty.</small></article>
+        </div>
+        <div class="output-strip">Output: the smallest relevant before-start, responsibility, execution, test and handover checklist</div>
+
+        <div class="callout">
+          The language model may propose task and context labels from the worker's description. A deterministic router validates them, the worker confirms them, and only reviewed policy packs can create a blocker or scope result.
+        </div>
+      </div>
+    </section>
+
+    <section id="phases">
+      <div class="wrap">
+        <h2>Documentation follows the life of the job</h2>
+        <p class="intro">Responsibilities are attached to a phase. This prevents handover requirements appearing during intake or execution controls being forgotten after the initial risk assessment.</p>
+        <div class="phase-grid">
+          <article class="phase"><span class="phase-no">1</span><h3>Intake</h3><p>Describe, split and bound the assignment. Identify owner, employer, site and work packages.</p></article>
+          <article class="phase"><span class="phase-no">2</span><h3>Eligibility</h3><p>Check personal competence, organization authorization, role assignment and responsibility interfaces.</p></article>
+          <article class="phase"><span class="phase-no">3</span><h3>Pre-start</h3><p>Load SHA/HMS, task-specific risk, FSE, work method, instructions, equipment and evidence requirements.</p></article>
+          <article class="phase"><span class="phase-no">4</span><h3>Execution</h3><p>Keep a concise work record, deviations, changes, time and evidence linked to the confirmed work package.</p></article>
+          <article class="phase"><span class="phase-no">5</span><h3>Test</h3><p>Apply system and task-specific final control, test method, result, deviation and correction requirements.</p></article>
+          <article class="phase"><span class="phase-no">6</span><h3>Handover</h3><p>Generate only the applicable declaration, report, as-built information and customer receipt.</p></article>
+          <article class="phase"><span class="phase-no">7</span><h3>Retention</h3><p>Preserve required copies, source versions, correction history and verification commitments.</p></article>
+          <article class="phase"><span class="phase-no">8</span><h3>Incident</h3><p>Protect private notes and create a worker-controlled chronology or selected evidence export.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="responsibility">
+      <div class="wrap">
+        <h2>Who is responsible for what</h2>
+        <p class="intro">The map must distinguish responsibility from task execution. A person may perform a task within an assignment while the employer, owner, registered enterprise, faglig ansvarlig or byggherre retains a different legal duty.</p>
+        <table>
+          <thead>
+            <tr><th>Context</th><th>Primary responsibility</th><th>Worker relationship</th><th>Evidence the app should request</th><th>Source pack</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>General HMS</td>
+              <td>Employer and organization leadership</td>
+              <td>Worker participates, follows measures and reports hazards.</td>
+              <td>Role allocation, training, risk assessment, instruction, deviation and corrective action.</td>
+              <td><span class="tag">AML</span><span class="tag">Internkontroll</span></td>
+            </tr>
+            <tr>
+              <td>Several companies</td>
+              <td>Main company coordinates HMS; each employer retains responsibility for own workers.</td>
+              <td>Worker receives understandable site and task instructions.</td>
+              <td>Coordination owner, interface agreement, shared risks and worker briefing.</td>
+              <td><span class="tag">AML 2-2</span><span class="tag">Internkontroll</span></td>
+            </tr>
+            <tr>
+              <td>Construction site</td>
+              <td>Byggherre owns SHA duties; coordinator follows assigned functions; employer integrates relevant measures.</td>
+              <td>Worker follows project and employer controls and may report uncovered risk.</td>
+              <td>SHA-plan reference, role agreement, HMS card where required, task risk and change notice.</td>
+              <td><span class="tag">Byggherreforskriften</span><span class="tag">HMS-kort</span></td>
+            </tr>
+            <tr>
+              <td>Electrical enterprise scope</td>
+              <td>Active registered electrical enterprise and its faglig ansvarlig.</td>
+              <td>Worker needs relevant documented competence and a valid assignment.</td>
+              <td>Registry snapshot, work and installation categories, faglig ansvarlig and worker competence.</td>
+              <td><span class="tag">FEK</span><span class="tag">Elvirksomhetsregisteret</span></td>
+            </tr>
+            <tr>
+              <td>Electrical work safety</td>
+              <td>Owner/operator retains overarching FSE responsibility; ansvarlig for arbeidet manages the low-voltage work safety function.</td>
+              <td>Worker receives method, safety measures, equipment and instruction for the actual task.</td>
+              <td>Installation information, named role, task risk, work method, PPE, barriers and instruction.</td>
+              <td><span class="tag">FSE 6-10</span></td>
+            </tr>
+            <tr>
+              <td>Electrical result</td>
+              <td>Enterprise responsible for design, execution, verification and applicable handover.</td>
+              <td>Worker records the evidence generated by the assigned operation.</td>
+              <td>Design basis, risk, final inspection, conformity, circuit list and equipment documentation as applicable.</td>
+              <td><span class="tag">FEL</span><span class="tag">NEK 400 reference</span><span class="tag">5 sikre</span></td>
+            </tr>
+            <tr>
+              <td>EKOM organization scope</td>
+              <td>ENA-authorized enterprise when authorization is required; qualified person supports the authorization basis.</td>
+              <td>Installer competence must be relevant and documented for the actual task.</td>
+              <td>ENA snapshot, responsible enterprise, qualified-person reference, installer competence and any exception basis.</td>
+              <td><span class="tag">Nkom ENA</span><span class="tag">Autorisasjonsforskriften</span></td>
+            </tr>
+            <tr>
+              <td>EKOM result</td>
+              <td>Responsible enterprise handles technical quality and applicable documentation and conformity.</td>
+              <td>Worker captures route, components, test and as-built evidence.</td>
+              <td>Network scope, medium, separation, test, labels, as-built, termination data and conformity.</td>
+              <td><span class="tag">Nkom technical</span><span class="tag">NEK 700 reference</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout warning"><strong>Production warning:</strong> this is a planning interpretation. Every row must be converted into smaller testable rules and reviewed by an appropriate domain expert before it can block or approve a real job.</div>
+      </div>
+    </section>
+
+    <section id="packs">
+      <div class="wrap">
+        <h2>Background policy packs</h2>
+        <p class="intro">The worker never selects a law manually. Confirmed job facts activate packs, and packs contribute questions, duties, stop conditions, evidence and handover items.</p>
+        <div class="cards">
+          <article class="card"><span class="kicker">Always</span><h3>Worker start</h3><p>Task, place, assignment, discipline, phase and personal credential questions.</p></article>
+          <article class="card"><span class="kicker">Organization present</span><h3>Organization start</h3><p>Employer, legal entity, owner/operator, responsibility, authorizations and coordination.</p></article>
+          <article class="card"><span class="kicker">Construction context</span><h3>SHA overlay</h3><p>Byggherre, coordinator, SHA plan, relevant measures, HMS card and uncovered project risk.</p></article>
+          <article class="card"><span class="kicker">Elektro selected</span><h3>Electrical gate</h3><p>Registered enterprise scope, faglig ansvarlig, worker competence and assignment.</p></article>
+          <article class="card"><span class="kicker">Elektro selected</span><h3>FSE pre-start</h3><p>Owner/operator, ansvarlig for arbeidet, task risk, method, equipment, PPE and instruction.</p></article>
+          <article class="card"><span class="kicker">Installation changes</span><h3>Electrical handover</h3><p>Design inputs, final control and the applicable FEL/5 sikre documentation package.</p></article>
+          <article class="card"><span class="kicker">EKOM selected</span><h3>EKOM gate</h3><p>Authorization applicability, ENA, responsible enterprise, installer competence and exception review.</p></article>
+          <article class="card"><span class="kicker">EKOM selected</span><h3>EKOM technical</h3><p>System, medium, function, route, separation, fire interface, power, test and as-built package.</p></article>
+          <article class="card"><span class="kicker">Both disciplines</span><h3>Mixed-work coordination</h3><p>Separate work packages, responsibility interfaces, cross-trade risks, tests and signatures.</p></article>
+        </div>
+
+        <h3 style="margin-top: 28px;">Existing esense fields already available for routing</h3>
+        <table>
+          <thead><tr><th>Current field group</th><th>Policy-map use</th><th>Important correction</th></tr></thead>
+          <tbody>
+            <tr><td>Discipline checkboxes</td><td>Load electrical, EKOM or mixed-work packs.</td><td>Discipline is only a candidate until exact tasks are confirmed.</td></tr>
+            <tr><td>Responsible people and companies</td><td>Populate role candidates and missing-role prompts.</td><td>A name in a field does not verify authority or role acceptance.</td></tr>
+            <tr><td>Building, area and influences</td><td>Route environmental, site and technical overlays.</td><td>Add an explicit construction-site and owner/operator question.</td></tr>
+            <tr><td>Work method and risk</td><td>Route FSE and general task-safety controls.</td><td>Method must follow the confirmed task risk, not be chosen only for convenience.</td></tr>
+            <tr><td>Electrical technical data</td><td>Route design, verification and handover inputs.</td><td>Calculations cannot substitute verified product data or professional review.</td></tr>
+            <tr><td>EKOM system and medium</td><td>Route authorization review, test type and documentation template.</td><td>Authorization depends on the exact activity and network, not merely an EKOM label.</td></tr>
+            <tr><td>Separation, power and fire sealing</td><td>Create cross-trade interfaces and evidence requirements.</td><td>These may introduce another responsible party or rule pack.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="example">
+      <div class="wrap">
+        <h2>Example: one request becomes two work packages</h2>
+        <p class="intro">A customer asks for a new electrical socket and a network outlet. The app should not answer the combined request with one credential check.</p>
+        <div class="example">
+          <article class="package electrical">
+            <h3>Electrical package</h3>
+            <ul>
+              <li>Confirm fixed-installation scope.</li>
+              <li>Verify active registered electrical enterprise category.</li>
+              <li>Confirm faglig ansvarlig, assigned worker competence and ansvarlig for arbeidet.</li>
+              <li>Run FSE task-risk and work-method checks.</li>
+              <li>Load applicable design, final-control and handover evidence.</li>
+            </ul>
+          </article>
+          <div class="divider" aria-hidden="true">+</div>
+          <article class="package ekom">
+            <h3>EKOM package</h3>
+            <ul>
+              <li>Classify the network activity and any authorization exception.</li>
+              <li>Verify responsible enterprise and ENA when required.</li>
+              <li>Confirm relevant installer competence.</li>
+              <li>Capture route, separation, category, terminations and test method.</li>
+              <li>Load applicable as-built, labeling and conformity evidence.</li>
+            </ul>
+          </article>
+        </div>
+        <div class="callout"><strong>Shared interface:</strong> power method, route, separation, EMC, fire sealing, ownership and customer handover are coordinated, while authority, responsibility and sign-off remain explicit per work package.</div>
+      </div>
+    </section>
+
+    <section id="efficiency">
+      <div class="wrap">
+        <h2>How this saves time</h2>
+        <p class="intro">The commercial value is not showing more regulations. It is reducing repeated entry, uncertainty, missing handover documents and rework.</p>
+        <div class="savings">
+          <article class="saving"><strong>Reuse verified facts</strong><span>Worker credentials, company authorizations and recurring responsible roles are checked once and refreshed when due.</span></article>
+          <article class="saving"><strong>Ask only the delta</strong><span>The app requests only missing or job-specific facts instead of repeating a full compliance form.</span></article>
+          <article class="saving"><strong>Split mixed work</strong><span>Free text becomes separate work packages before the worker starts, reducing wrong assumptions and handoffs.</span></article>
+          <article class="saving"><strong>Generate evidence lists</strong><span>Test and handover requirements appear while the work is being planned, not after the worker has left the site.</span></article>
+          <article class="saving"><strong>Prefill reports</strong><span>Confirmed observations, responsibility, tests and source versions flow into the final package without duplicate entry.</span></article>
+        </div>
+
+        <div class="callout">
+          <strong>Target interaction:</strong> show no more than five primary actions for the current phase. Put legal sources and detailed rationale behind a clear "Why?" view, while every blocker still names the missing fact and responsible party.
+        </div>
+      </div>
+    </section>
+
+    <section id="governance">
+      <div class="wrap">
+        <h2>Governance before automation</h2>
+        <p class="intro">The policy map becomes dangerous if it quietly goes stale. Rules need ownership, effective dates, source checks, negative tests and a visible uncertainty state.</p>
+        <ul class="checklist">
+          <li>Each rule has an owner, qualified reviewer, source IDs, effective date and review due date.</li>
+          <li>Official law, regulation, guidance, registry and licensed standard references are labeled differently.</li>
+          <li>Paid standards are referenced by edition and licensed section, not copied into the repository.</li>
+          <li>Every rule has positive, negative, boundary and uncertainty test cases.</li>
+          <li>Expired or changed sources disable confident approval until review is complete.</li>
+          <li>Completed assessments retain the exact historical map and source version.</li>
+          <li>The LLM cannot create or edit a production rule.</li>
+          <li>A domain expert approves the first electrical/EKOM pack before worker testing.</li>
+          <li>Workers can report an incorrect or unclear result without exposing unrelated job data.</li>
+          <li>Usage metrics measure time saved and correction rate, not worker productivity.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="builder">
+      <div class="wrap">
+        <h2>Implementation sequence for the builder</h2>
+        <table>
+          <thead><tr><th>Order</th><th>Deliverable</th><th>Acceptance gate</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Load and validate the JSON source registry, actors, phases and policy packs.</td><td>Unknown source references or duplicate IDs fail the build.</td></tr>
+            <tr><td>2</td><td>Add normalized task, role, authorization, source-version and assessment entities.</td><td>Historical assessments cannot change when a rule is updated.</td></tr>
+            <tr><td>3</td><td>Create a deterministic router around existing esense fields.</td><td>The same confirmed input always loads the same versioned packs without an LLM.</td></tr>
+            <tr><td>4</td><td>Add a manual task picker and progressive before-start checklist.</td><td>A worker can complete the flow offline and see no more than five primary actions per phase.</td></tr>
+            <tr><td>5</td><td>Add LLM task proposals through the isolated local queue.</td><td>Proposals require confirmation and cannot bypass router validation.</td></tr>
+            <tr><td>6</td><td>Pilot one reviewed mixed electrical/EKOM boundary.</td><td>A qualified reviewer approves representative safe, blocked and uncertain cases.</td></tr>
+          </tbody>
+        </table>
+        <div class="callout warning"><strong>Do not modify production esense from this draft.</strong> Build the router and first reviewed policy pack in a separate v2 staging path with tested migrations and a preserved production backup.</div>
+      </div>
+    </section>
+
+    <section id="sources">
+      <div class="wrap">
+        <h2>Initial official source set</h2>
+        <ul class="sources">
+          <li><a href="https://www.arbeidstilsynet.no/regelverk/lover/arbeidsmiljoloven--aml/">Arbeidsmiljoloven: employer, coordination and worker participation duties</a></li>
+          <li><a href="https://www.arbeidstilsynet.no/regelverk/forskrifter/internkontrollforskriften/">Internkontrollforskriften: organization, competence, risk and documented responsibility</a></li>
+          <li><a href="https://www.arbeidstilsynet.no/regelverk/forskrifter/byggherreforskriften/">Byggherreforskriften: SHA and actor responsibilities</a></li>
+          <li><a href="https://lovdata.no/dokument/SF/forskrift/2013-06-19-739">FEK: electrical-enterprise and qualification requirements</a></li>
+          <li><a href="https://lovdata.no/nav/forskrift/2006-04-28-458">FSE: roles and planning of electrical work</a></li>
+          <li><a href="https://www.dsb.no/elsikkerhet/elektriske-anlegg-og-utstyr/veiledning-til-forskrift-om-elektriske-lavspenningsanlegg/">FEL guidance: low-voltage safety, planning and documentation</a></li>
+          <li><a href="https://www.dsb.no/elsikkerhet/elektriske-anlegg-og-utstyr/5-sikre---for-standard-boligdokumentasjon/">DSB 5 sikre: applicable residential documentation set</a></li>
+          <li><a href="https://nkom.no/fysiske-nett-og-infrastruktur/ekomnettautorisasjon">Nkom ENA: authorized enterprise and qualified-person model</a></li>
+          <li><a href="https://lovdata.no/dokument/SF/forskrift/2011-12-07-1206">EKOM authorization regulation: competence, execution and documentation</a></li>
+          <li><a href="https://nkom.no/fysiske-nett-og-infrastruktur/tekniske-krav-til-ekomnett">Nkom technical requirements and documentation forms</a></li>
+          <li><a href="https://www.nek.no/produkter/nek-400/">NEK 400:2026 product and edition reference</a></li>
+          <li><a href="https://www.nek.no/produkter/nek-700/">NEK 700:2024 product and edition reference</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>esense documentation map v0.1</span>
+      <span>Planning artifact. Requires qualified domain and legal review before production use.</span>
+    </div>
+  </footer>
+</body>
+</html>

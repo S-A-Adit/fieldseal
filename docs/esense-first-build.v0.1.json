@@ -1,0 +1,178 @@
+{
+  "schema_version": "0.1",
+  "product": "esense",
+  "build_name": "professional_assignment_planning",
+  "purpose": "Enable an organization to assign a job and enable the assigned person to identify relevant planning considerations, prepare a versioned plan, and submit it for review.",
+  "product_position": {
+    "interface": "professional",
+    "pilot_organization": "school",
+    "pilot_mapping": {
+      "teacher": ["task_provider", "reviewer"],
+      "student": ["assigned_worker"]
+    },
+    "rule": "Teacher and student are pilot mappings and must not become product permission names."
+  },
+  "execution_contexts": [
+    {
+      "id": "training_synthetic",
+      "label": "Training - synthetic job",
+      "required_marking": "Exercise: not professional work"
+    },
+    {
+      "id": "supervised_practice",
+      "label": "Supervised practice",
+      "required_marking": "Supervision and responsible roles must be named"
+    },
+    {
+      "id": "professional_work",
+      "label": "Professional work",
+      "required_marking": "Organization authorization, competence, and responsibility remain separate checks"
+    }
+  ],
+  "roles": [
+    {
+      "id": "task_provider",
+      "can": ["create_assignment", "publish_assignment", "assign_people", "answer_clarifications", "cancel_assignment"],
+      "cannot_imply": ["professional_responsibility", "worker_competence"]
+    },
+    {
+      "id": "assigned_worker",
+      "can": ["accept_assignment", "decline_assignment", "request_clarification", "prepare_plan", "submit_version"],
+      "cannot_imply": ["authorization", "professional_responsibility", "independent_execution_right"]
+    },
+    {
+      "id": "reviewer",
+      "can": ["review_submitted_version", "return_findings", "accept_plan"],
+      "cannot": ["open_private_draft", "silently_edit_worker_submission"]
+    },
+    {
+      "id": "professionally_responsible",
+      "can": ["confirm_role_scope_when_verified"],
+      "cannot_be_created_by": ["assignment", "self_declaration_without_state"]
+    }
+  ],
+  "workflow": [
+    "create_assignment",
+    "assign_roles",
+    "publish_version",
+    "accept_decline_or_clarify",
+    "classify_work_packages",
+    "answer_situational_questions",
+    "review_source_considerations",
+    "prepare_work_plan",
+    "submit_immutable_version",
+    "review_accept_or_return",
+    "submit_corrected_version"
+  ],
+  "assignment_required_fields": [
+    "organization_id",
+    "execution_context",
+    "task_provider_id",
+    "assigned_worker_ids",
+    "reviewer_ids",
+    "purpose",
+    "desired_result",
+    "known_scope",
+    "known_constraints",
+    "location_or_system_context",
+    "due_at",
+    "expected_submission",
+    "assignment_version"
+  ],
+  "work_package_families": ["electro", "ekom"],
+  "regulation_output_contract": [
+    "source_class",
+    "title",
+    "publisher",
+    "source_reference",
+    "url_or_licensed_reference",
+    "effective_date",
+    "reviewed_version",
+    "review_owner",
+    "triggering_fact",
+    "responsible_actor",
+    "planning_consideration",
+    "expected_evidence",
+    "uncertainty",
+    "supersession_status"
+  ],
+  "source_classes": [
+    "law",
+    "regulation",
+    "official_guidance",
+    "standard",
+    "manufacturer_instruction",
+    "organization_procedure"
+  ],
+  "assignment_states": [
+    "draft",
+    "published",
+    "accepted",
+    "declined",
+    "in_planning",
+    "submitted",
+    "returned",
+    "accepted_plan",
+    "cancelled",
+    "closed"
+  ],
+  "submission_states": [
+    "working_copy",
+    "submitted",
+    "under_review",
+    "returned",
+    "accepted",
+    "superseded"
+  ],
+  "sync_states": ["local", "queued", "syncing", "synced", "failed", "conflict"],
+  "privacy_rules": [
+    "The organization can read assignments it owns.",
+    "The task provider and reviewer can read deliberately submitted versions.",
+    "Private working notes and unrelated personal records remain private.",
+    "Submission creates an immutable snapshot and an explicit disclosure event.",
+    "Training data must be synthetic or explicitly school-approved.",
+    "No raw personal or organization evidence is written to a public blockchain."
+  ],
+  "entities": [
+    "people",
+    "organizations",
+    "memberships",
+    "organization_authorizations",
+    "credential_claims",
+    "assignments",
+    "assignment_versions",
+    "assignment_roles",
+    "work_packages",
+    "planning_responses",
+    "rule_sources",
+    "task_assessments",
+    "evidence_items",
+    "submissions",
+    "reviews",
+    "disclosure_grants",
+    "audit_events"
+  ],
+  "first_build_out_of_scope": [
+    "work_execution_management",
+    "final_inspection",
+    "customer_handover",
+    "billing_and_payment",
+    "automatic_legal_conclusion",
+    "automatic_competence_approval",
+    "public_reputation_scoring",
+    "government_integration",
+    "midnight_mainnet",
+    "llm_required_for_core_flow"
+  ],
+  "acceptance_gates": [
+    "A task provider can publish a versioned assignment and assign independent roles.",
+    "An assigned worker can complete the planning flow on mobile without teacher assistance.",
+    "A mixed elektro and ekom request becomes separate work packages.",
+    "Every source consideration explains its trigger, responsible actor, expected evidence, provenance, and uncertainty.",
+    "A reviewer can access only submitted versions and return structured findings.",
+    "Corrections create a new linked version and preserve the prior submission.",
+    "Training context is visible in the interface and every export.",
+    "Offline interruption causes no data loss and sync state remains understandable.",
+    "The complete flow works with all LLM services disabled."
+  ]
+}

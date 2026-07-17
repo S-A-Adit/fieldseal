@@ -1,0 +1,38 @@
+pragma language_version 0.23;
+
+import CompactStandardLibrary;
+
+// Only privacy-safe SHA-256 commitments enter this registry. Customer and job
+// content remain in esense and are never passed to the public ledger.
+export sealed ledger issuer: Bytes<32>;
+export ledger activeReceipts: Set<Bytes<32>>;
+export ledger revokedReceipts: Set<Bytes<32>>;
+
+witness localSecret(): Bytes<32>;
+
+constructor() {
+    issuer = disclose(issuerKey(localSecret()));
+}
+
+export circuit registerReceipt(receiptCommitment: Bytes<32>): [] {
+    assert(issuer == issuerKey(localSecret()), "Only the esense issuer can register receipts");
+    assert(!activeReceipts.member(disclose(receiptCommitment)), "Receipt is already registered");
+    assert(!revokedReceipts.member(disclose(receiptCommitment)), "Revoked receipt cannot be registered again");
+    activeReceipts.insert(disclose(receiptCommitment));
+}
+
+export circuit revokeReceipt(receiptCommitment: Bytes<32>): [] {
+    assert(issuer == issuerKey(localSecret()), "Only the esense issuer can revoke receipts");
+    assert(activeReceipts.member(disclose(receiptCommitment)), "Receipt is not registered");
+    assert(!revokedReceipts.member(disclose(receiptCommitment)), "Receipt is already revoked");
+    revokedReceipts.insert(disclose(receiptCommitment));
+}
+
+export circuit assertValidReceipt(receiptCommitment: Bytes<32>): [] {
+    assert(activeReceipts.member(disclose(receiptCommitment)), "Receipt is not registered");
+    assert(!revokedReceipts.member(disclose(receiptCommitment)), "Receipt is revoked");
+}
+
+circuit issuerKey(secret: Bytes<32>): Bytes<32> {
+    return persistentHash<Vector<2, Bytes<32>>>([pad(32, "esense:issuer:"), secret]);
+}

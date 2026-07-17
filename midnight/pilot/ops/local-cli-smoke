@@ -1,0 +1,76 @@
+#!/bin/sh
+set -eu
+
+app_dir="${1:-/home/cardano/midnight-esense-pilot}"
+runtime="${NODE_RUNTIME:-/home/cardano/.local/node22/bin/node}"
+tsx="$app_dir/node_modules/tsx/dist/cli.mjs"
+cli="$app_dir/src/pilot-cli.ts"
+state_dir="$(mktemp -d /tmp/esense-midnight-cli.XXXXXX)"
+
+cleanup() {
+  cd "$app_dir"
+  sudo docker compose down >/dev/null 2>&1 || true
+  rm -rf "$state_dir"
+}
+trap cleanup EXIT INT TERM
+
+wait_healthy() {
+  service="$1"
+  attempts=0
+  while [ "$attempts" -lt 30 ]; do
+    container_id="$(sudo docker compose ps -q "$service")"
+    if [ -n "$container_id" ]; then
+      health="$(sudo docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' "$container_id")"
+      [ "$health" = "healthy" ] && return 0
+      [ "$health" = "exited" ] && return 1
+    fi
+    attempts=$((attempts + 1))
+    sleep 2
+  done
+  return 1
+}
+
+export MIDNIGHT_NETWORK=local
+export MIDNIGHT_ISSUER_SECRET=4c7f06f9508f58f7e68f849f219dc375b76f4d573d2cb68d063a843a840a6c42
+export MIDNIGHT_PRIVATE_STATE_PASSWORD=Local-Pilot-Password-2026!
+commitment=e64bbb986ecc4d5eabe4f0640913fdb6a80d3f34a527895fcdad2752f01cdc7d
+
+cd "$app_dir"
+sudo docker compose up -d node proof-server >/dev/null
+wait_healthy node
+wait_healthy proof-server
+sleep 5
+indexer_attempt=0
+while [ "$indexer_attempt" -lt 3 ]; do
+  sudo docker compose up -d indexer >/dev/null
+  wait_healthy indexer && break
+  sudo docker compose stop indexer >/dev/null 2>&1 || true
+  indexer_attempt=$((indexer_attempt + 1))
+  sleep 5
+done
+wait_healthy indexer
+cd "$state_dir"
+
+deployment="$($runtime "$tsx" "$cli" deploy | awk '/^\{"ok":/{line=$0} END{print line}')"
+contract_address="$(printf '%s' "$deployment" | jq -er '.contractAddress')"
+export MIDNIGHT_CONTRACT_ADDRESS="$contract_address"
+
+registration="$($runtime "$tsx" "$cli" register "$commitment" | awk '/^\{"ok":/{line=$0} END{print line}')"
+registered="$($runtime "$tsx" "$cli" verify "$commitment" | awk '/^\{"ok":/{line=$0} END{print line}')"
+printf '%s' "$registered" | jq -e '.ok and .registered and .valid and (.revoked | not)' >/dev/null
+
+revocation="$($runtime "$tsx" "$cli" revoke "$commitment" | awk '/^\{"ok":/{line=$0} END{print line}')"
+revoked="$($runtime "$tsx" "$cli" verify "$commitment" | awk '/^\{"ok":/{line=$0} END{print line}')"
+printf '%s' "$revoked" | jq -e '.ok and .registered and .revoked and (.valid | not)' >/dev/null
+
+printf '%s\n' "$deployment" "$registration" "$revocation" "$revoked" | jq -c '{
+  ok,
+  network,
+  contractAddress,
+  operation,
+  transactionId,
+  blockHeight,
+  registered,
+  revoked,
+  valid
+}'

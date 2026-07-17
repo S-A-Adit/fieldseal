@@ -1,0 +1,7 @@
+/node_modules
+/contracts/managed
+/midnight-level-db
+/.env.preprod
+/.env.preview
+/deployment.json
+/logs

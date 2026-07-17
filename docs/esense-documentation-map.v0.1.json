@@ -1,0 +1,442 @@
+{
+  "map_id": "esense.no.worker.electro-ekom.documentation-map",
+  "version": "0.1.0",
+  "status": "planning_draft_requires_domain_and_legal_review",
+  "updated_at": "2026-07-16",
+  "locale": "nb-NO",
+  "purpose": "Route a worker or organization to the smallest relevant set of responsibilities, sources, questions, evidence and handover requirements for the current esense electro and EKOM workload.",
+  "non_goals": [
+    "This map is not a legal opinion.",
+    "This map does not grant authorization or certify competence.",
+    "This map does not reproduce paid standards.",
+    "An LLM may classify a proposed task but may not decide the final scope result.",
+    "No production result may use a rule that has not been reviewed by a qualified owner."
+  ],
+  "routing_dimensions": [
+    "person_credentials",
+    "organization_authorizations",
+    "assignment_and_responsible_roles",
+    "discipline_and_exact_task",
+    "work_phase",
+    "site_and_building_context",
+    "hazards_and_work_method",
+    "technical_system",
+    "jurisdiction_and_effective_date"
+  ],
+  "phases": [
+    { "id": "intake", "label": "Oppdrag og avgrensning" },
+    { "id": "eligibility", "label": "Kompetanse, autorisasjon og ansvar" },
+    { "id": "pre_start", "label": "Planlegging, SHA/HMS og risikovurdering" },
+    { "id": "execution", "label": "Sikker gjennomforing" },
+    { "id": "test", "label": "Kontroll, test og avvik" },
+    { "id": "handover", "label": "Dokumentasjon og overlevering" },
+    { "id": "retention", "label": "Oppbevaring, endring og sporbarhet" },
+    { "id": "incident", "label": "Uhell, varsling og myndighetseksport" }
+  ],
+  "actors": [
+    { "id": "worker", "label": "Arbeidstaker / utforende" },
+    { "id": "employer", "label": "Arbeidsgiver" },
+    { "id": "organization_management", "label": "Virksomhetens ledelse" },
+    { "id": "main_company", "label": "Hovedbedrift / HMS-samordning" },
+    { "id": "owner_operator", "label": "Eier / driver av anlegg" },
+    { "id": "electrical_enterprise", "label": "Registrert elvirksomhet" },
+    { "id": "electrical_professional_responsible", "label": "Faglig ansvarlig elektro" },
+    { "id": "electrical_work_responsible", "label": "Ansvarlig for arbeidet, lavspenning" },
+    { "id": "ekom_authorized_enterprise", "label": "ENA-autorisert virksomhet" },
+    { "id": "ekom_qualified_person", "label": "Kvalifisert person for ENA" },
+    { "id": "builder", "label": "Byggherre" },
+    { "id": "sha_coordinator", "label": "SHA-koordinator" },
+    { "id": "customer_owner", "label": "Kunde / eier / netteier" },
+    { "id": "verifier", "label": "Kunde, revisor, fagforening eller myndighet" }
+  ],
+  "sources": {
+    "aml_2": {
+      "title": "Arbeidsmiljoloven kapittel 2",
+      "type": "law",
+      "authority": "Arbeidstilsynet",
+      "access": "public",
+      "url": "https://www.arbeidstilsynet.no/regelverk/lover/arbeidsmiljoloven--aml/",
+      "use": "Employer responsibility, coordination and worker participation duties."
+    },
+    "internkontroll_4_5": {
+      "title": "Internkontrollforskriften sections 4 and 5",
+      "type": "regulation",
+      "authority": "Arbeidstilsynet",
+      "access": "public",
+      "url": "https://www.arbeidstilsynet.no/regelverk/forskrifter/internkontrollforskriften/",
+      "use": "Organization, competence, responsibility allocation, risk assessment, corrective routines and documented review."
+    },
+    "working_time": {
+      "title": "Registrering av arbeidstid",
+      "type": "official_guidance",
+      "authority": "Arbeidstilsynet",
+      "access": "public",
+      "url": "https://www.arbeidstilsynet.no/arbeidstid-og-organisering/arbeidstid/registrering-av-arbeidstid/",
+      "use": "Actual working time and breaks, employer responsibility and understandable records."
+    },
+    "builder_regulation": {
+      "title": "Byggherreforskriften",
+      "type": "regulation",
+      "authority": "Arbeidstilsynet",
+      "access": "public",
+      "url": "https://www.arbeidstilsynet.no/regelverk/forskrifter/byggherreforskriften/",
+      "use": "Builder, coordinator, designer, employer and sole-proprietor responsibilities, SHA plan and project-specific risk."
+    },
+    "hms_card": {
+      "title": "HMS-kort",
+      "type": "official_guidance",
+      "authority": "Arbeidstilsynet",
+      "access": "public",
+      "url": "https://www.arbeidstilsynet.no/hms/hms-kort/",
+      "use": "HMS-card requirement and verification for covered sectors and sites."
+    },
+    "fek": {
+      "title": "Forskrift om elektroforetak og kvalifikasjonskrav",
+      "type": "regulation",
+      "authority": "DSB / Lovdata",
+      "access": "public",
+      "url": "https://lovdata.no/dokument/SF/forskrift/2013-06-19-739",
+      "use": "Enterprise registration, professional responsibility and individual qualification boundaries."
+    },
+    "electrical_registry": {
+      "title": "Elvirksomhetsregisteret",
+      "type": "official_registry",
+      "authority": "DSB",
+      "access": "public",
+      "url": "https://elvirksomhetsregisteret.dsb.no/",
+      "use": "Verify active enterprise status and registered work and installation categories."
+    },
+    "fse_6_10": {
+      "title": "FSE sections 6 to 10",
+      "type": "regulation",
+      "authority": "DSB / Lovdata",
+      "access": "public",
+      "url": "https://lovdata.no/nav/forskrift/2006-04-28-458",
+      "use": "Roles, overordnet planning, work-specific risk assessment, work method, equipment, PPE and personnel instruction."
+    },
+    "statnett_afa_low_voltage": {
+      "title": "Instruks for ansvarlig for arbeidet (AFA) ved arbeid på eller nær ved lavspenningsanlegg",
+      "type": "organization_procedure",
+      "authority": "Statnett",
+      "access": "public",
+      "document_id": "SDOK-515-12",
+      "revision": "7.0",
+      "approved_at": "2026-01-02",
+      "checked_at": "2026-07-16",
+      "canonical_url": "https://samhandling.statnett.no/styrendedok/Dok.aspx?id=SDOK-515-12",
+      "url": "https://www.statnett.no/globalassets/om-statnett/elsikkerhet/instruks-for-ansvarlig-for-arbeidet.pdf",
+      "scope": "Applies only to low-voltage installations for which Statnett is operationally responsible. It is not a universal rule for electrical work outside that scope.",
+      "use": "Scoped workflow reference for named safety responsibility, documented task risk, work method, ordered safety measures, presence during work and explicit safe closure. Always verify the current canonical revision before use."
+    },
+    "fel": {
+      "title": "Forskrift om elektriske lavspenningsanlegg",
+      "type": "regulation",
+      "authority": "DSB",
+      "access": "public",
+      "url": "https://www.dsb.no/elsikkerhet/elektriske-anlegg-og-utstyr/veiledning-til-forskrift-om-elektriske-lavspenningsanlegg/",
+      "use": "Safety requirements, planning, risk, conformity and documentation for low-voltage installations."
+    },
+    "five_safe": {
+      "title": "5 sikre for standard boligdokumentasjon",
+      "type": "officially_accepted_documentation_guidance",
+      "authority": "DSB / NHO Elektro",
+      "access": "public_forms",
+      "url": "https://www.dsb.no/elsikkerhet/elektriske-anlegg-og-utstyr/5-sikre---for-standard-boligdokumentasjon/",
+      "use": "Risk report, conformity declaration, final inspection, circuit list and equipment documentation for relevant residential work."
+    },
+    "nek_400_2026": {
+      "title": "NEK 400:2026",
+      "type": "standard",
+      "authority": "Norsk Elektroteknisk Komite",
+      "access": "licensed",
+      "url": "https://www.nek.no/produkter/nek-400/",
+      "use": "Central referenced method for low-voltage installation safety. Store citations and licensed references, not copied standard text."
+    },
+    "ekom_authorization": {
+      "title": "Ekomnettautorisasjon, ENA",
+      "type": "official_authorization_guidance",
+      "authority": "Nkom",
+      "access": "public",
+      "url": "https://nkom.no/fysiske-nett-og-infrastruktur/ekomnettautorisasjon",
+      "use": "Enterprise authorization, qualified person and personnel competence boundary."
+    },
+    "ekom_authorization_regulation": {
+      "title": "Autorisasjonsforskriften for ekomnett",
+      "type": "regulation",
+      "authority": "Nkom / Lovdata",
+      "access": "public",
+      "url": "https://lovdata.no/dokument/SF/forskrift/2011-12-07-1206",
+      "use": "Authorized-enterprise responsibility, installer competence, execution, documentation, conformity declaration and retention."
+    },
+    "ekom_technical": {
+      "title": "Tekniske krav til ekomnett",
+      "type": "official_guidance_and_forms",
+      "authority": "Nkom",
+      "access": "public",
+      "url": "https://nkom.no/fysiske-nett-og-infrastruktur/tekniske-krav-til-ekomnett",
+      "use": "Current technical guidance, authorization scope, documentation and conformity forms."
+    },
+    "nek_700_2024": {
+      "title": "NEK 700:2024",
+      "type": "standard",
+      "authority": "Norsk Elektroteknisk Komite",
+      "access": "licensed",
+      "url": "https://www.nek.no/produkter/nek-700/",
+      "use": "Referenced planning and construction method for functional cabling. Store citations and licensed references, not copied standard text."
+    },
+    "whistleblowing": {
+      "title": "Varsling og tips",
+      "type": "official_guidance",
+      "authority": "Arbeidstilsynet",
+      "access": "public",
+      "url": "https://www.arbeidstilsynet.no/arbeidsmiljo/varsling/Slik-kan-du-varsle-om-kritikkverdige-forhold/",
+      "use": "Worker-controlled reporting paths and protection from retaliation."
+    }
+  },
+  "responsibility_matrix": [
+    {
+      "id": "general.employer_safe_work",
+      "phases": ["eligibility", "pre_start", "execution", "incident"],
+      "primary_actor": "employer",
+      "supporting_actors": ["worker", "organization_management"],
+      "duty": "Organize work and maintain a fully responsible working environment, including systematic HMS and necessary competence, instruction and risk controls.",
+      "sources": ["aml_2", "internkontroll_4_5"],
+      "evidence": ["role_allocation", "training_record", "risk_assessment", "work_instruction", "corrective_action"]
+    },
+    {
+      "id": "general.worker_participation",
+      "phases": ["pre_start", "execution", "test", "incident"],
+      "primary_actor": "worker",
+      "supporting_actors": ["employer"],
+      "duty": "Participate in HMS, follow established measures and report hazards or deficiencies through the applicable process.",
+      "sources": ["aml_2", "internkontroll_4_5"],
+      "evidence": ["worker_confirmation", "hazard_note", "deviation_record"]
+    },
+    {
+      "id": "general.actual_working_time",
+      "phases": ["execution", "retention"],
+      "primary_actor": "employer",
+      "supporting_actors": ["worker"],
+      "duty": "Maintain a written, current and understandable record of actual working time and breaks.",
+      "sources": ["working_time"],
+      "evidence": ["time_entry", "break_entry", "worker_review", "correction_history"]
+    },
+    {
+      "id": "construction.builder_sha",
+      "phases": ["intake", "pre_start", "execution", "retention"],
+      "primary_actor": "builder",
+      "supporting_actors": ["sha_coordinator", "employer"],
+      "duty": "Ensure project-specific SHA planning, coordination and follow-up when the construction-site rules apply.",
+      "sources": ["builder_regulation"],
+      "evidence": ["sha_plan_reference", "role_agreement", "project_risk", "change_log"]
+    },
+    {
+      "id": "construction.employer_execution",
+      "phases": ["pre_start", "execution", "incident"],
+      "primary_actor": "employer",
+      "supporting_actors": ["worker", "builder", "sha_coordinator"],
+      "duty": "Integrate relevant SHA measures into internal control, conduct necessary risk assessments and inform the builder about uncovered project risks or needed changes.",
+      "sources": ["builder_regulation", "internkontroll_4_5"],
+      "evidence": ["sha_received", "worker_briefing", "task_risk", "builder_notification"]
+    },
+    {
+      "id": "electrical.owner_operator",
+      "phases": ["intake", "eligibility", "pre_start", "execution"],
+      "primary_actor": "owner_operator",
+      "supporting_actors": ["electrical_enterprise", "electrical_professional_responsible"],
+      "duty": "Maintain the overarching safety organization for operation and ensure relevant external electrical work is assigned to a registered enterprise.",
+      "sources": ["fse_6_10", "electrical_registry"],
+      "evidence": ["installation_owner", "operations_responsible", "enterprise_registry_snapshot", "responsibility_interface"]
+    },
+    {
+      "id": "electrical.enterprise_scope",
+      "phases": ["eligibility", "handover", "retention"],
+      "primary_actor": "electrical_enterprise",
+      "supporting_actors": ["electrical_professional_responsible", "worker"],
+      "duty": "Accept only work within active registered categories, use qualified personnel and preserve required enterprise documentation.",
+      "sources": ["fek", "electrical_registry", "fel"],
+      "evidence": ["registry_snapshot", "registered_work_category", "assigned_professional_responsible", "personnel_competence"]
+    },
+    {
+      "id": "electrical.work_safety",
+      "phases": ["pre_start", "execution", "test"],
+      "primary_actor": "electrical_work_responsible",
+      "supporting_actors": ["owner_operator", "worker", "electrical_professional_responsible"],
+      "duty": "Obtain necessary installation information and ensure the work-specific risk assessment drives work method, equipment, PPE and personnel instruction.",
+      "sources": ["fse_6_10"],
+      "evidence": ["responsible_for_work", "installation_information", "work_risk", "work_method", "safety_measures", "personnel_instruction"]
+    },
+    {
+      "id": "electrical.design_and_handover",
+      "phases": ["intake", "pre_start", "test", "handover", "retention"],
+      "primary_actor": "electrical_enterprise",
+      "supporting_actors": ["electrical_professional_responsible", "worker", "customer_owner"],
+      "duty": "Plan for intended use and risk, verify the completed installation and deliver the applicable conformity and technical documentation.",
+      "sources": ["fel", "five_safe", "nek_400_2026"],
+      "evidence": ["design_basis", "risk_report", "final_inspection", "conformity_declaration", "circuit_list", "equipment_documentation", "customer_handover"]
+    },
+    {
+      "id": "ekom.enterprise_authorization",
+      "phases": ["eligibility", "execution", "handover", "retention"],
+      "primary_actor": "ekom_authorized_enterprise",
+      "supporting_actors": ["ekom_qualified_person", "worker"],
+      "duty": "Hold the required enterprise authorization when applicable, use personnel with relevant documented competence and retain required installation documentation.",
+      "sources": ["ekom_authorization", "ekom_authorization_regulation"],
+      "evidence": ["ena_snapshot", "qualified_person_reference", "installer_competence", "scope_exception_basis"]
+    },
+    {
+      "id": "ekom.execution_and_handover",
+      "phases": ["intake", "pre_start", "execution", "test", "handover", "retention"],
+      "primary_actor": "ekom_authorized_enterprise",
+      "supporting_actors": ["worker", "customer_owner"],
+      "duty": "Plan and execute to applicable technical requirements, test the relevant function and produce the required network documentation and conformity declaration.",
+      "sources": ["ekom_authorization_regulation", "ekom_technical", "nek_700_2024"],
+      "evidence": ["network_scope", "medium_and_components", "route_and_separation", "test_result", "as_built", "port_or_termination_list", "conformity_declaration", "owner_handover"]
+    }
+  ],
+  "policy_packs": [
+    {
+      "id": "base_worker_start",
+      "label": "Worker start pack",
+      "triggers": ["always"],
+      "phases": ["intake", "eligibility"],
+      "questions": ["What are you being asked to do?", "Where will it happen?", "Who assigned the work?", "Which disciplines appear involved?", "Is this new work, change, maintenance, test or inspection?"],
+      "sources": ["aml_2", "internkontroll_4_5"],
+      "outputs": ["task_candidates", "discipline_candidates", "missing_context", "personal_credential_questions"]
+    },
+    {
+      "id": "base_organization_start",
+      "label": "Organization responsibility pack",
+      "triggers": ["organization_context_present"],
+      "phases": ["eligibility", "pre_start"],
+      "questions": ["Which legal entity accepts the work?", "Who is the employer?", "Who owns or operates the installation?", "Who holds professional and safety roles?", "Are multiple companies working together?"],
+      "sources": ["aml_2", "internkontroll_4_5"],
+      "outputs": ["organization_roles", "responsibility_gaps", "coordination_requirements"]
+    },
+    {
+      "id": "construction_site_overlay",
+      "label": "Construction-site SHA overlay",
+      "triggers": ["site_context == construction_site"],
+      "phases": ["intake", "pre_start", "execution"],
+      "questions": ["Who is the builder?", "Does the project have an applicable SHA plan?", "Who coordinates execution?", "Has the worker received relevant measures in a language understood?", "Is an HMS card required and valid?"],
+      "sources": ["builder_regulation", "hms_card", "internkontroll_4_5"],
+      "outputs": ["sha_actions", "hms_card_status", "project_risk_actions", "builder_notification_actions"]
+    },
+    {
+      "id": "electrical_enterprise_gate",
+      "label": "Electrical enterprise and person gate",
+      "triggers": ["disciplineElektro == true"],
+      "phases": ["eligibility"],
+      "questions": ["Is this work on an electrical installation or equipment?", "Which enterprise accepts the assignment?", "Is the enterprise active for the relevant work and installation category?", "Who is professionally responsible?", "What verified competence covers the worker and exact task?"],
+      "sources": ["fek", "electrical_registry"],
+      "outputs": ["enterprise_gate", "person_gate", "assignment_gate", "stop_or_review_reason"]
+    },
+    {
+      "id": "electrical_pre_start",
+      "label": "Electrical pre-start and FSE pack",
+      "triggers": ["disciplineElektro == true"],
+      "phases": ["pre_start", "execution"],
+      "questions": ["Who owns or operates the installation?", "Who is responsible for the work?", "What installation information is required?", "Which work method follows from the task risk?", "Are equipment, PPE, barriers and personnel instructions confirmed?"],
+      "sources": ["fse_6_10", "internkontroll_4_5"],
+      "outputs": ["work_responsible", "work_method", "safety_checklist", "pre_start_stop_conditions"]
+    },
+    {
+      "id": "statnett_low_voltage_overlay",
+      "label": "Statnett low-voltage AFA overlay",
+      "triggers": ["installation_operator == statnett", "disciplineElektro == true"],
+      "phases": ["pre_start", "execution", "test"],
+      "questions": ["Is Statnett operationally responsible for this installation?", "Which current revision of SDOK-515-12 applies?", "Who is designated as responsible for the work?", "Which work method and ordered safety measures follow from the documented task risk?", "How will the installation and workplace be safely closed and returned to operation?"],
+      "sources": ["fse_6_10", "statnett_afa_low_voltage"],
+      "outputs": ["scope_confirmation", "instruction_revision", "responsible_for_work", "work_method", "ordered_safety_measures", "safe_closure_record"]
+    },
+    {
+      "id": "electrical_design_handover",
+      "label": "Electrical design, test and handover pack",
+      "triggers": ["disciplineElektro == true", "work_changes_installation == true"],
+      "phases": ["intake", "pre_start", "test", "handover", "retention"],
+      "questions": ["What is the intended use and environment?", "What design and protection data must be confirmed?", "Which final tests apply?", "Which documentation must be delivered and retained?"],
+      "sources": ["fel", "five_safe", "nek_400_2026"],
+      "outputs": ["design_inputs", "test_plan", "handover_checklist", "retention_checklist"]
+    },
+    {
+      "id": "ekom_enterprise_gate",
+      "label": "EKOM authorization and competence gate",
+      "triggers": ["disciplineEkom == true"],
+      "phases": ["eligibility"],
+      "questions": ["Is the task installation or maintenance of an ekom network?", "Does an authorization exception appear applicable?", "Which enterprise is responsible?", "Is ENA active when required?", "What documented competence covers the installer and task?"],
+      "sources": ["ekom_authorization", "ekom_authorization_regulation", "ekom_technical"],
+      "outputs": ["ena_gate", "exception_review", "installer_competence_gate", "stop_or_review_reason"]
+    },
+    {
+      "id": "ekom_technical_handover",
+      "label": "EKOM technical, test and handover pack",
+      "triggers": ["disciplineEkom == true"],
+      "phases": ["intake", "pre_start", "execution", "test", "handover", "retention"],
+      "questions": ["Which system and medium?", "What function and quality are expected?", "How are route, separation, fire sealing and power handled?", "Which tests verify the result?", "Which as-built and conformity documents apply?"],
+      "sources": ["ekom_authorization_regulation", "ekom_technical", "nek_700_2024"],
+      "outputs": ["technical_inputs", "route_requirements", "test_plan", "handover_checklist", "retention_checklist"]
+    },
+    {
+      "id": "mixed_electro_ekom_coordination",
+      "label": "Mixed electrical and EKOM coordination pack",
+      "triggers": ["disciplineElektro == true", "disciplineEkom == true"],
+      "phases": ["intake", "eligibility", "pre_start", "handover"],
+      "questions": ["Where does each work package begin and end?", "Which enterprise and responsible person owns each package?", "Which interfaces affect power, separation, EMC, fire sealing or testing?", "Who signs each handover?"],
+      "sources": ["internkontroll_4_5", "fek", "fel", "ekom_authorization_regulation", "ekom_technical"],
+      "outputs": ["split_work_packages", "responsibility_interfaces", "cross_trade_risks", "separate_handover_packages"]
+    },
+    {
+      "id": "worker_evidence_export",
+      "label": "Worker-controlled evidence and incident pack",
+      "triggers": ["worker_requests_export == true", "incident_or_discrepancy == true"],
+      "phases": ["incident", "retention"],
+      "questions": ["What happened and when?", "Which records support the chronology?", "Which recipient and purpose?", "Which fields should remain private?", "Does the worker confirm the final package?"],
+      "sources": ["whistleblowing", "working_time"],
+      "outputs": ["chronology", "selected_evidence", "source_provenance", "pdf_export", "json_export", "receipt"]
+    }
+  ],
+  "current_field_routes": [
+    { "field": "description", "purpose": "LLM proposes task candidates; worker confirms exact work packages." },
+    { "field": "disciplineElektro", "purpose": "Loads electrical enterprise, FSE, FEL and applicable standard-reference packs." },
+    { "field": "disciplineEkom", "purpose": "Loads ENA, EKOM competence, technical and handover packs." },
+    { "field": "electroResponsible", "purpose": "Captures the named electrical responsibility context; does not itself verify authority." },
+    { "field": "ekomResponsible", "purpose": "Captures the responsible EKOM enterprise context; requires independent ENA verification when applicable." },
+    { "field": "buildingType", "purpose": "Routes environment and site overlays; a separate construction-site question is still required." },
+    { "field": "areaType", "purpose": "Routes location-specific task and environmental questions." },
+    { "field": "influence", "purpose": "Routes hazard and design-condition questions." },
+    { "field": "workMethod", "purpose": "Routes FSE method and safety-control requirements." },
+    { "field": "responsiblePerson", "purpose": "Names a role only after the applicable role type and authority are established." },
+    { "field": "phaseSystem", "purpose": "Routes electrical technical checks." },
+    { "field": "installationMethod", "purpose": "Routes design inputs and installation evidence." },
+    { "field": "ekomSystemArea", "purpose": "Routes system-specific EKOM questions and evidence templates." },
+    { "field": "ekomMedium", "purpose": "Routes component, test and documentation choices." },
+    { "field": "powerMethod", "purpose": "Creates an electrical/EKOM interface when active equipment or PoE is involved." },
+    { "field": "separationPlan", "purpose": "Routes electrical/EKOM coordination and technical evidence." },
+    { "field": "fireSealing", "purpose": "Routes building/fire interface questions and handover evidence." }
+  ],
+  "ui_contract": {
+    "default_sections": ["Before start", "Who is responsible", "During the work", "Test and handover"],
+    "max_primary_actions_per_phase": 5,
+    "progressive_disclosure": true,
+    "show_source_on_demand": true,
+    "show_reason_for_every_blocker": true,
+    "remember_verified_personal_and_organization_facts": true,
+    "ask_only_changed_or_missing_context": true,
+    "offline_manual_path_required": true
+  },
+  "allowed_outcomes": [
+    "within_documented_scope",
+    "organization_authorization_required",
+    "additional_competence_or_supervision_required",
+    "missing_assignment_or_responsible_role",
+    "missing_job_information",
+    "human_or_authority_review_required",
+    "stop_before_work"
+  ],
+  "governance": {
+    "required_rule_fields": ["owner", "reviewer", "source_ids", "effective_from", "review_due", "test_cases", "change_reason"],
+    "production_release_requires": ["domain_expert_review", "source_link_check", "effective_date_check", "positive_tests", "negative_tests", "uncertainty_tests", "plain_language_review"],
+    "standard_handling": "Store standard identifier, edition and licensed section references. Do not copy protected standard text into the repository or model context without the necessary license.",
+    "history": "Never rewrite the rule version attached to a completed assessment. New rules create a new assessment version."
+  }
+}
