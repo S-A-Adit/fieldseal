@@ -552,15 +552,15 @@ function demoPackageForArchive() {
   const recipients = demo.access?.recipients || [];
   return {
     id: demo.receipt.package_id,
-    organization_name: "esense demo",
+    organization_name: "FieldSeal demo",
     customer_id: "esense-synthetic-demo-property",
-    customer_name: tr("Eksempelkunde (syntetisk)"),
-    customer_address: tr("Demoveien 14, 4021 Stavanger"),
+    customer_name: tr("Demoeier (syntetisk)"),
+    customer_address: tr("Syntetisk bolig, Bradenton, Florida"),
     property_reference: demo.report.property_reference,
-    assignment_title: tr("Demooppdrag: kurs og nettverkspunkt"),
-    work_families: ["electro", "ekom"],
+    assignment_title: tr("Demooppdrag: installasjon av elbillader"),
+    work_families: ["electro"],
     title: tr("Utstedt rapportpakke"),
-    summary: tr("Komplett, syntetisk overlevering med samsvarserklæring, sluttkontroll, kursfortegnelse, FDV og ekom-måling."),
+    summary: tr("Komplett, syntetisk overlevering med lastberegning, kontrollresultater, panelmerking, produktdata og idriftsetting."),
     status: demo.receipt.status,
     issued_at: demo.receipt.issued_at,
     commitment: demo.receipt.commitment,
@@ -586,7 +586,7 @@ function demoDocumentPackageCard(item) {
   return `<details class="document-card document-row demo-archive-card">
     <summary class="document-row-summary"><span class="document-row-date">${escapeHtml(formatDate(item.issued_at))}</span><span class="document-row-title"><strong>${escapeHtml(item.title)}</strong><small>${escapeHtml(item.job_reference)}</small></span><span class="document-row-midnight">${midnightMark()}<strong>${escapeHtml(midnightStatusLabel(item.midnight_status))}</strong></span><span class="status-badge issued">${escapeHtml(tr("Ferdig demo"))}</span><span class="document-row-chevron" aria-hidden="true">⌄</span></summary>
     <div class="document-row-body">
-    <div class="document-card-main"><div class="document-title"><span>${escapeHtml(`esense demo · ${item.job_reference}`)}</span><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.summary)}</p></div><span class="status-badge issued">${escapeHtml(tr("Ferdig demo"))}</span></div>
+    <div class="document-card-main"><div class="document-title"><span>${escapeHtml(`FieldSeal demo · ${item.job_reference}`)}</span><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.summary)}</p></div><span class="status-badge issued">${escapeHtml(tr("Ferdig demo"))}</span></div>
     <div class="document-demo"><strong>${escapeHtml(tr("Syntetisk demonstrasjon"))}</strong><span>${escapeHtml(tr("Ingen personer, steder eller måleverdier gjelder et virkelig anlegg."))}</span></div>
     <div class="receipt-facts"><div><span>${escapeHtml(tr("Utstedt"))}</span><strong>${escapeHtml(formatDate(item.issued_at))}</strong></div><div><span>${escapeHtml(tr("Integritet"))}</span><strong>${escapeHtml(item.integrity.valid ? tr("Gyldig og uendret") : tr("Kan ikke bekreftes"))}</strong></div><div class="midnight-fact"><span>${midnightMark()}</span><strong>${escapeHtml(midnightStatusLabel(item.midnight_status))}</strong></div><div><span>${escapeHtml(tr("Kvittering"))}</span><code>${escapeHtml(item.commitment.slice(0, 14))}…</code></div></div>
     ${grants ? `<ul class="grant-list demo-grant-list">${grants}</ul>` : `<div class="demo-access-empty">${escapeHtml(tr("Ingen demomottakere har tilgang ennå."))}</div>`}
@@ -1566,7 +1566,7 @@ function renderDemoShareDialog() {
   byId("demoShareReportLink").href = demoReportPath();
   byId("demoShareContent").innerHTML = `
     <div class="document-demo detail-demo"><strong>${escapeHtml(tr("Trygg demonstrasjon"))}</strong><span>${escapeHtml(tr("Tilgangene gjelder bare din egen syntetiske økt. Ingen e-post sendes, og ingen virkelig mottaker opprettes."))}</span></div>
-    <div class="demo-proof-flow"><section><span>01 · esense</span><h3>${escapeHtml(tr("Styrer hvem som kan lese"))}</h3><p>${escapeHtml(tr("Mottaker, formål og varighet kan gis og trekkes tilbake uten å endre rapporten."))}</p></section><section><span>02 · Midnight</span><h3>${escapeHtml(tr("Bekrefter samme rapportversjon"))}</h3><p>${escapeHtml(tr("Bare dokumentforpliktelsen er forankret. Rapportinnhold og personopplysninger forblir private i esense."))}</p></section></div>
+    <div class="demo-proof-flow"><section><span>01 · FieldSeal</span><h3>${escapeHtml(tr("Styrer hvem som kan lese"))}</h3><p>${escapeHtml(tr("Mottaker, formål og varighet kan gis og trekkes tilbake uten å endre rapporten."))}</p></section><section><span>02 · Midnight</span><h3>${escapeHtml(tr("Bekrefter samme rapportversjon"))}</h3><p>${escapeHtml(tr("Bare dokumentforpliktelsen er forankret. Rapportinnhold og personopplysninger forblir private i FieldSeal."))}</p></section></div>
     <ul class="demo-recipient-list">${recipients}</ul>
     <dl class="demo-anchor-facts"><div><dt>${escapeHtml(tr("Rapport"))}</dt><dd><code>${escapeHtml(item.job_reference)}</code></dd></div><div><dt>${midnightMark()}</dt><dd>${escapeHtml(midnightStatusLabel(item.midnight_status))}</dd></div><div><dt>${escapeHtml(tr("Transaksjon"))}</dt><dd><code>${escapeHtml(transaction.id || tr("Ikke tilgjengelig"))}</code></dd></div><div><dt>${escapeHtml(tr("Blokk"))}</dt><dd>${escapeHtml(transaction.block_height == null ? tr("Ikke tilgjengelig") : String(transaction.block_height))}</dd></div></dl>
     <p class="demo-anchor-note">${escapeHtml(tr("Når en demotilgang endres, er Midnight-forankringen uendret. Den bekrefter fortsatt nøyaktig den utstedte rapportversjonen."))}</p>`;
@@ -1584,7 +1584,7 @@ function openDemoRecipientView(recipientKey) {
   byId("demoRecipientReportLink").href = demoReportPath();
   byId("demoRecipientContent").innerHTML = `
     <div class="recipient-access-state"><span>${escapeHtml(tr("Tilgang aktiv"))}</span><strong>${escapeHtml(item.title)}</strong><p>${escapeHtml(demoRecipientPurpose(recipient.key))}</p></div>
-    <div class="recipient-entry-flow" aria-label="${escapeHtml(tr("Slik får mottakeren tilgang"))}"><section><span>01</span><div><strong>${escapeHtml(tr("Motta invitasjon"))}</strong><p>${escapeHtml(tr("esense sender en sikker lenke til den registrerte e-postadressen."))}</p></div></section><section><span>02</span><div><strong>${escapeHtml(tr("Bekreft identitet"))}</strong><p>${escapeHtml(tr("Mottakeren logger inn med samme adresse som tilgangen ble gitt til."))}</p></div></section><section><span>03</span><div><strong>${escapeHtml(tr("Åpne delt dokumentasjon"))}</strong><p>${escapeHtml(tr("Bare denne pakken vises i mottakerens dokumentarkiv."))}</p></div></section></div>
+    <div class="recipient-entry-flow" aria-label="${escapeHtml(tr("Slik får mottakeren tilgang"))}"><section><span>01</span><div><strong>${escapeHtml(tr("Motta invitasjon"))}</strong><p>${escapeHtml(tr("FieldSeal gir en sikker lenke som kan deles med den registrerte e-postadressen."))}</p></div></section><section><span>02</span><div><strong>${escapeHtml(tr("Bekreft identitet"))}</strong><p>${escapeHtml(tr("Mottakeren logger inn med samme adresse som tilgangen ble gitt til."))}</p></div></section><spa
     <dl class="recipient-access-facts"><div><dt>${escapeHtml(tr("Rolle"))}</dt><dd>${escapeHtml(role)}</dd></div><div><dt>${escapeHtml(tr("Formål"))}</dt><dd>${escapeHtml(demoRecipientPurpose(recipient.key))}</dd></div><div><dt>${escapeHtml(tr("Varighet"))}</dt><dd>${escapeHtml(demoDurationLabel(recipient.duration_kind, recipient.expires_at))}</dd></div><div><dt>${midnightMark()}</dt><dd>${escapeHtml(midnightStatusLabel(item.midnight_status))}</dd></div></dl>
     <div class="recipient-permissions"><section><span aria-hidden="true">✓</span><div><strong>${escapeHtml(tr("Kan lese rapporten"))}</strong><p>${escapeHtml(tr("Mottakeren får innholdet som er uttrykkelig delt for dette formålet."))}</p></div></section><section><span aria-hidden="true">✓</span><div><strong>${escapeHtml(tr("Kan kontrollere rapportversjonen"))}</strong><p>${escapeHtml(tr("Midnight-forankringen bekrefter at den utstedte rapporten er uendret."))}</p></div></section><section class="restricted"><span aria-hidden="true">–</span><div><strong>${escapeHtml(tr("Kan ikke endre eller videredele"))}</strong><p>${escapeHtml(tr("Mottakeren ser ikke andre oppdrag, medlemmer eller organisasjonsdata."))}</p></div></section></div>
     <p class="recipient-demo-note">${escapeHtml(tr("I denne syntetiske demoen hoppes e-post og ny innlogging over. Tilgangsreglene er de samme som i den virkelige dokumentflyten."))}</p>`;

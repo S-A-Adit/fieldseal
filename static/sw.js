@@ -1,15 +1,15 @@
-const CACHE_NAME = "esense-documentation-v39";
+const CACHE_NAME = "esense-documentation-v41";
 const APP_SHELL = [
   "/static/index.html",
   "/static/app.css?v=32",
-  "/static/i18n.js?v=20",
+  "/static/i18n.js?v=22",
   "/static/tooltips.js?v=2",
-  "/static/app.js?v=37",
+  "/static/app.js?v=39",
   "/static/manifest.webmanifest",
   "/static/midnight-demo.en.html",
   "/static/midnight-demo.css?v=4",
-  "/static/midnight-demo.locales.js?v=1",
-  "/static/midnight-demo.en.js?v=3",
+  "/static/midnight-demo.locales.js?v=3",
+  "/static/midnight-demo.en.js?v=4",
   "/static/midnight-logo-dark.svg"
 ];
 

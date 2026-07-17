@@ -2,7 +2,7 @@ const byId = (id) => document.getElementById(id);
 const SUPPORTED_LANGUAGES = ["no", "en", "pl", "lt", "lv"];
 const pathLanguage = window.location.pathname.split("/").filter(Boolean)[0];
 const currentLanguage = SUPPORTED_LANGUAGES.includes(pathLanguage) ? pathLanguage : "en";
-const locales = window.esenseReportLocales || {};
+const locales = window.fieldSealReportLocales || window.esenseReportLocales || {};
 const locale = locales[currentLanguage] || locales.en;
 const fallbackLocale = locales.en || locale;
 

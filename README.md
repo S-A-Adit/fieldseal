@@ -1,105 +1,95 @@
-# esense
+# FieldSeal
 
-esense is a private, worker-first assignment and work-planning system for
-professional organizations, schools, task providers, reviewers and assigned
-workers.
+FieldSeal turns completed field work into a private, controlled report whose exact issued version can be verified on Midnight without publishing the report itself.
 
-[Live synthetic demonstration](https://esense.no/en/demo-report) | [Midnight receipt pilot](midnight/README.md)
+**Hackathon goal:** demonstrate one assignment from creation to recipient verification in under three minutes.
 
-This repository is the public hackathon snapshot. It contains synthetic demo
-content only. Runtime databases, uploaded documents, credentials, private
-state and generated contract artifacts are intentionally excluded.
+- [48-hour product wireframe and build board](docs/fieldseal-hackathon-wireframe.html)
+- [Implementation map and verified baseline](docs/fieldseal-hackathon-implementation-map.md)
+- [Midnight receipt pilot](midnight/README.md)
 
-The current production generation focuses on:
+FieldSeal is adapted from the upstream [`Kfagermo/esense`](https://github.com/Kfagermo/esense) project. This fork preserves the original workflow and Midnight preprod pilot while adapting the product identity, terminology, and synthetic demonstration for the US market.
+
+This repository is a public hackathon snapshot. It contains synthetic demonstration content only. Runtime databases, uploaded documents, credentials, private state, and generated contract artifacts are intentionally excluded.
+
+## Demo path
+
+1. A manager creates a realistic work order and assigns a team.
+2. Field professionals add timestamped evidence and submit completed work.
+3. A reviewer approves the exact version used to issue the report.
+4. FieldSeal encrypts the report and anchors only its salted commitment.
+5. A recipient receives limited access and verifies the issued version against Midnight.
+
+The application currently supports:
 
 - organization membership with explicit roles;
-- professional assignment briefs;
-- private worker planning drafts;
-- deterministic electro and ekom source considerations;
-- deliberate, versioned planning submissions;
-- a separate execution and final-inspection record with private drafts;
-- independent review gates for both planning and completed work;
-- encrypted documentation packages built from accepted plan and completion evidence;
-- owner handover and purpose-bound recipient access;
-- a protected report view for authorized recipients;
-- selective recipient revocation and full package revocation;
-- local integrity receipts with an explicit Midnight anchoring status.
+- assignment briefs and team responsibility;
+- private planning and completion drafts;
+- timestamped evidence with integrity commitments;
+- deliberate, versioned planning and completion submissions;
+- independent review gates;
+- AES-256-GCM encrypted documentation packages;
+- purpose-bound recipient access and revocation;
+- local integrity receipts and optional Midnight anchoring;
+- a public synthetic verification report.
 
-The interface and professional source guidance can be shown in Norwegian or
-English. Norwegian remains the default, the user's choice persists across the
-sign-in and application screens, and user-entered assignment and report text is
-never machine-translated. The central translation layer is designed to accept
-reviewed Polish, Lithuanian and Latvian dictionaries later without duplicating
-the application. Google and tenant-restricted Microsoft Entra ID can be enabled
-independently. See `docs/microsoft-entra-oppsett.md` for the school IT setup.
+Assignment does not imply competence, authorization, supervision, or professional responsibility. Source prompts are planning aids, not legal conclusions. Qualified people remain responsible for professional and jurisdiction-specific decisions.
 
-Assignment does not imply competence, authorization, supervision or
-professional responsibility. The source prompts are planning aids, not legal
-decisions. A qualified person remains responsible for the final assessment.
+## Privacy boundary
 
-The documentation helper currently uses deterministic policy and workflow
-rules. It does not send assignment content to an external AI service. Private
-package manifests are protected with AES-256-GCM. Only a salted commitment is
-eligible for the separate Midnight pilot; the application reports
-`not_submitted` until an independently verifiable transaction exists.
+FieldSeal keeps report content, personal data, files, measurements, package manifests, and recipient permissions off-chain.
 
-Production must keep `SECRET_KEY`, `ESENSE_RECEIPT_SECRET`, and
-`ESENSE_DOCUMENT_SECRET` stable and outside the application directory. Losing
-the document secret makes existing encrypted packages unreadable.
+Only a salted document commitment and the minimum proof state needed for registration, verification, and revocation are eligible for the Midnight pilot. The application reports `not_submitted` until an independently verifiable transaction exists.
+
+Production must keep `SECRET_KEY`, `ESENSE_RECEIPT_SECRET`, and `ESENSE_DOCUMENT_SECRET` stable and outside the application directory. The legacy `ESENSE_*` names remain supported for compatibility while the fork is migrated carefully. Losing the document secret makes existing encrypted packages unreadable.
 
 ## Local verification
 
-Create a virtual environment, install `requirements.txt`, copy `.env.example`
-to `.env`, provide local development secrets, and run:
+Create a virtual environment and install the pinned requirements:
 
 ```text
-python workflow_smoke.py
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python workflow_smoke.py
 ```
 
-The smoke workflow covers the complete provider, worker, reviewer and outsider
-lifecycle: assignment, private planning, plan approval, private execution
-record, final-inspection approval, protected owner package, access grants,
-Midnight receipt processing and revocation.
+The smoke workflow covers the provider, worker, reviewer, recipient, package, Midnight receipt, verification, access-revocation, and package-revocation lifecycle.
 
 ## Local visual QA
 
-The public demonstration can be rendered locally without production access,
-production data, browser extensions or live Midnight calls. Run:
+Run the isolated synthetic preview:
 
 ```text
-python visual_preview.py
+.venv/bin/python visual_preview.py
 ```
 
-Then open `http://127.0.0.1:5055/en/demo-report`. The preview uses the real
-templates, styles and browser code with an isolated synthetic fixture that
-represents a confirmed preprod anchor. It is suitable for desktop, mobile,
-tooltip and accessibility review, but it is not evidence of a new network
-transaction. Production truth remains available from the production health and
-public demonstration API checks.
+Then open:
 
-## Public English demonstration
+```text
+http://127.0.0.1:5055/en/demo-report
+```
 
-`/en/demo-report` presents an English, synthetic example of an issued work
-report. Its public API, `/api/public/midnight-demo`, returns fixed fictional
-report content and only the package reference, commitment and verification
-state from the matching synthetic database record. It must not return user,
-recipient, organization or free-form database content.
+The preview uses the real templates, styles, browser code, and a synthetic fixture representing a confirmed preprod anchor. It is useful for desktop/mobile and accessibility QA, but it is not evidence of a new network transaction.
 
-The page uses the official dark Midnight logo from the Midnight brand hub only
-at the proposed anchoring boundary and network status. It must not imply that
-esense encryption or access control is provided by Midnight. The status remains
-`not_submitted` and no transaction is shown until an independently verifiable
-network receipt exists.
+## Public synthetic demonstration
 
-Inside the application, the same logo is intentionally used as a small
-contextual mark rather than general branding. Hovering it, or focusing it with
-a keyboard, explains the privacy boundary and current transaction claim.
+`/en/demo-report` presents a fictional issued work report. Its API, `/api/public/midnight-demo`, returns fixed synthetic report content plus only the package reference, commitment, and verification state from the matching synthetic record. It must never return user, recipient, organization, credential, or arbitrary free-form database content.
 
-## Production
+Midnight branding is shown only at the anchoring and verification boundary. FieldSeal encryption and access control are application responsibilities, not services provided by Midnight.
 
-Production runtime secrets stay outside version control, and the SQLite
-database lives under the ignored `data/` directory. Neither credentials nor
-production records are committed.
+## Midnight preprod compatibility
 
-The legacy production system was archived before this generation was deployed.
-No legacy users, jobs, uploads or records are imported automatically.
+The current preprod worker configuration continues to use the established environment variables:
+
+```text
+ESENSE_MIDNIGHT_ENABLED
+ESENSE_MIDNIGHT_NETWORK
+ESENSE_MIDNIGHT_CONTRACT_ADDRESS
+ESENSE_MIDNIGHT_WORKER_TOKEN
+```
+
+Do not rename or remove these variables without adding and testing backward-compatible `FIELDSEAL_*` aliases. The network must remain `preprod` for the hackathon unless the team explicitly changes that requirement.
+
+## Production hygiene
+
+Production secrets stay outside version control. The SQLite database and uploaded evidence live under the ignored `data/` directory. Credentials, private records, generated contract artifacts, and runtime state must not be committed.

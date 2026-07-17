@@ -25,7 +25,7 @@ import app as esense  # noqa: E402
 from flask import redirect, session  # noqa: E402
 
 
-TIMESTAMP = "2026-07-15T18:37:31.313684+00:00"
+TIMESTAMP = "2026-07-17T20:10:00+00:00"
 USER_ID = "usr_visual_preview"
 ORGANIZATION_ID = "org_visual_preview"
 ASSIGNMENT_ID = "asg_visual_preview"
@@ -86,13 +86,13 @@ def seed_preview() -> None:
                 esense.DEMO_ASSIGNMENT_TITLE,
                 "Demonstrate controlled work documentation.",
                 "A complete synthetic report with an integrity receipt.",
-                "Electrical distribution circuit and structured cabling outlet.",
+                "Hardwired 48 A Level 2 EV charger on a dedicated 60 A branch circuit.",
                 "Synthetic training data only.",
-                "Training workshop A",
+                "Synthetic residence / garage, Bradenton, Florida",
                 "training_synthetic",
                 "2026-07-31T12:00:00+00:00",
-                "Plan, test results and handover documentation.",
-                json.dumps(["electrical", "ekom"]),
+                "Load calculation, installation plan, test results, commissioning and handover documentation.",
+                json.dumps(["electrical"]),
                 USER_ID,
                 "Synthetic qualified supervisor",
                 1,
@@ -129,15 +129,15 @@ def seed_preview() -> None:
                 USER_ID,
                 json.dumps(
                     {
-                        "work_description": "Plan a dedicated final circuit and a separate Cat 6A permanent link in the training workshop.",
-                        "building_type": "bolig",
+                        "work_description": "Plan a hardwired 48 A Level 2 EV charger on a dedicated 60 A, 240 V branch circuit.",
+                        "building_type": "residential",
                         "construction_site": "no",
                         "energized_proximity": "yes",
-                        "responsibility_check": "The synthetic school organisation assigns and reviews the exercise.",
-                        "work_method": "Isolate, verify, install, terminate, test and document each work package separately.",
-                        "risk_controls": "Secure isolation, protect the cable route and keep electrical and ekom responsibilities explicit.",
-                        "tools_materials": "Installation tester, permanent-link tester and approved product documentation.",
-                        "tests_and_evidence": "Record electrical final inspection, circuit directory, photographs and Cat 6A certification.",
+                        "responsibility_check": "The synthetic electrical contractor assigns the work and records the responsible license holder.",
+                        "work_method": "Verify service capacity, isolate, install the branch circuit and EV charger, torque, test, commission and document.",
+                        "risk_controls": "Secure isolation, control the garage work area, protect the cable route and follow equipment instructions.",
+                        "tools_materials": "Electrical tester, torque tools, approved breaker and conductors, EV charger and manufacturer documentation.",
+                        "tests_and_evidence": "Record load calculation, panel schedule, electrical tests, torque verification, commissioning and photographs.",
                         "open_questions": "Confirm the final owner handover recipient before issue.",
                     }
                 ),

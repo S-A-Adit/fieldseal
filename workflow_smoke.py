@@ -28,14 +28,17 @@ def main() -> None:
         assert "Fortsett med Microsoft" in login_text
         assert "Ingen innloggingsleverandør er konfigurert" not in login_text
         assert "data-language-select" in login_text
-        assert "/static/i18n.js?v=20" in login_text
-        i18n_asset = esense.app.test_client().get("/static/i18n.js?v=20")
+        assert "<h1>FieldSeal</h1>" in login_text
+        assert "/static/i18n.js?v=22" in login_text
+        i18n_asset = esense.app.test_client().get("/static/i18n.js?v=22")
         assert i18n_asset.status_code == 200
         i18n_text = i18n_asset.get_data(as_text=True)
         assert '"Oppdrag og dokumentasjon": "Assignments and documentation"' in i18n_text
         assert '"Forskrift": "Regulation"' in i18n_text
         assert '"Innstillinger": "Settings"' in i18n_text
         assert '"Stilling eller fagrolle": "Position or professional role"' in i18n_text
+        assert '"Privat i FieldSeal": "Private in FieldSeal"' in i18n_text
+        assert '"Dokumentforpliktelsen er bekreftet på Midnight. Rapportinnhold og personopplysninger forblir private i FieldSeal.": "The document commitment is confirmed on Midnight. Report content and personal data remain private in FieldSeal."' in i18n_text
         users = {
             "provider": ("usr_provider", "provider@example.test", "Oppdragsgiver"),
             "worker": ("usr_worker", "worker@example.test", "Arbeidstaker"),
@@ -110,10 +113,10 @@ def main() -> None:
         assert application_page.status_code == 200
         application_text = application_page.get_data(as_text=True)
         assert "data-language-select" in application_text
-        assert "/static/app.js?v=37" in application_text
+        assert "/static/app.js?v=39" in application_text
         assert "/static/app.css?v=32" in application_text
         assert application_text.index('id="settingsButton"') < application_text.index('id="syncState"') < application_text.index('class="logout-link"')
-        assert "/static/i18n.js?v=20" in application_text
+        assert "/static/i18n.js?v=22" in application_text
         assert 'id="documentSortFilter"' in application_text
         assert "documentation-demo-link" not in application_text
         assert "Utstedte pakker forblir private" not in application_text
@@ -174,8 +177,16 @@ def main() -> None:
         assert 'id="overviewAssistant"' not in application_text
         assert '<h1 id="overviewTitle">Oversikt</h1>' in application_text
         assert '<h1 id="assignmentsTitle">Oppdrag</h1>' in application_text
+        assert '<strong>FieldSeal</strong>' in application_text
+        assert '<title>FieldSeal | dokumentasjon og oppdrag</title>' in application_text
+        assert "/static/app.js?v=39" in application_text
+        manifest_asset = provider.get("/static/manifest.webmanifest")
+        assert manifest_asset.status_code == 200
+        manifest_payload = esense.json.loads(manifest_asset.get_data(as_text=True))
+        assert manifest_payload["name"].startswith("FieldSeal")
+        assert manifest_payload["short_name"] == "FieldSeal"
         assert "Kun oppdrag du er tildelt" not in application_text
-        app_asset = provider.get("/static/app.js?v=37")
+        app_asset = provider.get("/static/app.js?v=39")
         assert app_asset.status_code == 200
         app_text = app_asset.get_data(as_text=True)
         assert "function renderSidebarAssignments()" in app_text
@@ -210,8 +221,11 @@ def main() -> None:
         assert "function renderActiveRoles(roles = [], fallback = \"Medlem\")" in app_text
         assert 'class="document-job-summary"' in app_text
         assert "function documentWorkFamilies(item)" in app_text
-        assert 'customer_name: tr("Eksempelkunde (syntetisk)")' in app_text
+        assert 'customer_name: tr("Demoeier (syntetisk)")' in app_text
+        assert 'assignment_title: tr("Demooppdrag: installasjon av elbillader")' in app_text
+        assert 'work_families: ["electro"]' in app_text
         assert 'managerView ? "Oversikt" : reviewerView ? "Til vurdering" : "Mine oppdrag"' in app_text
+        assert "FieldSeal demo" in app_text
         assert "helper.dataset.nextAction" in app_text
         css_asset = provider.get("/static/app.css?v=32")
         assert css_asset.status_code == 200
@@ -696,20 +710,51 @@ def main() -> None:
         assert '<option value="pl">Polski</option>' in public_page_text
         assert '<option value="lt">Lietuvi' in public_page_text
         assert '<option value="lv">Latvie' in public_page_text
-        assert "/static/midnight-demo.locales.js?v=1" in public_page_text
-        locale_asset = public_client.get("/static/midnight-demo.locales.js?v=1")
+        assert "/static/midnight-demo.locales.js?v=3" in public_page_text
+        assert "/static/midnight-demo.en.js?v=4" in public_page_text
+        assert "FieldSeal" in public_page_text
+        locale_asset = public_client.get("/static/midnight-demo.locales.js?v=3")
         assert locale_asset.status_code == 200
         locale_text = locale_asset.get_data(as_text=True)
-        assert "Wydany raport z prac elektrycznych" in locale_text
-        assert "Išduota elektros darbų ataskaita" in locale_text
-        assert "Izdots elektroinstalācijas darbu ziņojums" in locale_text
+        assert "Wydany raport z instalacji ładowarki EV" in locale_text
+        assert "FieldSeal demonstration environment" in locale_text
+        assert "window.fieldSealReportLocales = locales" in locale_text
+        assert "window.esenseReportLocales = locales" in locale_text
+        assert "Private in FieldSeal" in locale_text
+        assert "Private in esense" not in locale_text
+        assert "Išduota EV įkroviklio įrengimo ataskaita" in locale_text
+        assert "Izdots EV lādētāja uzstādīšanas ziņojums" in locale_text
+        assert "Issued EV charger installation report" in locale_text
+        assert "Suncoast EV Electric LLC" in locale_text
+        assert "Cat 6A" not in locale_text
+        assert "home office" not in locale_text
+        client_asset = public_client.get("/static/midnight-demo.en.js?v=4")
+        assert client_asset.status_code == 200
+        client_text = client_asset.get_data(as_text=True)
+        assert "window.fieldSealReportLocales || window.esenseReportLocales || {}" in client_text
+        service_worker = public_client.get("/sw.js")
+        assert service_worker.status_code == 200
+        service_worker_text = service_worker.get_data(as_text=True)
+        assert 'const CACHE_NAME = "esense-documentation-v41"' in service_worker_text
+        for asset_url in (
+            "/static/i18n.js?v=22",
+            "/static/app.js?v=39",
+            "/static/midnight-demo.locales.js?v=3",
+            "/static/midnight-demo.en.js?v=4",
+        ):
+            assert asset_url in service_worker_text
+        assert "Open esense" not in public_page_text
+        assert "Private in esense" not in public_page_text
         public_demo = esense.app.test_client().get("/api/public/midnight-demo")
         assert public_demo.status_code == 200, public_demo.get_data(as_text=True)
         public_payload = public_demo.get_json()
         assert public_payload["demonstration"] is True
         assert public_payload["receipt"]["commitment"] == document_package["commitment"]
         assert public_payload["receipt"]["integrity"]["valid"] is True
-        assert public_payload["report"]["job_reference"] == "ES-DEMO-2026-0715-04"
+        assert public_payload["report"]["job_reference"] == "FS-EV-DEMO-2026-0717-01"
+        assert public_payload["report"]["title"] == "Issued EV charger installation report"
+        assert "Bradenton, Florida" in public_payload["report"]["property_reference"]
+        assert "48 A Level 2 EV charger" in public_payload["report"]["summary"]
         assert len(public_payload["report"]["documents"]) == 6
         assert len(public_payload["report"]["timeline"]) == 4
         assert public_payload["midnight"]["status"] == "confirmed"

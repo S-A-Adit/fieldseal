@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#f0502f" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-title" content="esense" />
+    <meta name="apple-mobile-web-app-title" content="FieldSeal" />
     <link rel="manifest" href="/static/manifest.webmanifest" />
     <link rel="stylesheet" href="/static/app.css?v=32" onerror="this.onerror=null;this.href='./app.css?v=32'" />
-    <title>esense | dokumentasjon og oppdrag</title>
+    <title>FieldSeal | dokumentasjon og oppdrag</title>
   </head>
   <body>
     <div class="app-shell">
       <header class="topbar">
-        <button class="brand" id="homeButton" type="button" aria-label="Gå til oversikt"><span class="brand-mark">e</span><strong>esense</strong></button>
+        <button class="brand" id="homeButton" type="button" aria-label="Gå til oversikt"><span class="brand-mark">F</span><strong>FieldSeal</strong></button>
         <div class="organization-context">
           <strong id="organizationNameDisplay" translate="no"></strong>
         </div>
@@ -109,7 +109,7 @@
             <div><span class="eyebrow">Sikker dokumentasjon</span><h1 id="documentationTitle">Kunde- og oppdragsarkiv</h1></div>
           </div>
           <div class="assurance-strip" aria-label="Beskyttelsesnivå">
-            <div><span>Innhold</span><strong>Privat i esense</strong><p>Rapporter og personopplysninger sendes ikke til blokkjeden.</p></div>
+            <div><span>Innhold</span><strong>Privat i FieldSeal</strong><p>Rapporter og personopplysninger sendes ikke til blokkjeden.</p></div>
             <div><span>Tilgang</span><strong>Formål og mottaker</strong><p>Eier, ny virksomhet eller myndighet får avgrenset tilgang.</p></div>
             <div><span>Integritet</span><strong>Lokalt signert</strong><p>Endringer oppdages ved kontroll av dokumentkvitteringen.</p></div>
             <div class="midnight-assurance"><span><span class="midnight-mark" tabindex="0" aria-label="Midnight-grense: bare dokumentforpliktelsen kan forankres. Rapportinnhold og personopplysninger forblir private, og ingen transaksjon hevdes før den er bekreftet." data-tooltip="Midnight-grense: bare dokumentforpliktelsen kan forankres. Rapportinnhold og personopplysninger forblir private, og ingen transaksjon hevdes før den er bekreftet."><img src="/static/midnight-logo-dark.svg" alt="Midnight" /></span></span><strong id="documentationMidnightStatus">Ikke forankret</strong><p id="documentationMidnightDetail">Pilotstatus</p></div>
@@ -306,7 +306,7 @@
       <form id="assignmentForm">
         <div class="dialog-header"><div><span class="eyebrow" id="assignmentDialogEyebrow">Nytt oppdrag</span><h2 id="assignmentDialogTitle">Definer oppdraget</h2><p id="assignmentDialogIntro">Skill mellom kjente fakta, antakelser og det den tildelte personen må avklare.</p></div><button class="close-button" type="button" data-close="assignmentDialog" aria-label="Lukk">×</button></div>
         <div class="dialog-body form-grid">
-          <div class="field wide"><label for="assignmentTitleInput">Tittel</label><input id="assignmentTitleInput" required placeholder="For eksempel: Planlegg ny kurs og nettverkspunkt i verksted" /></div>
+          <div class="field wide"><label for="assignmentTitleInput">Tittel</label><input id="assignmentTitleInput" required placeholder="For eksempel: Installer nivå 2-elbillader i boliggarasje" /></div>
           <fieldset class="field wide family-options"><legend>Omfatter</legend><label><input type="checkbox" name="workFamily" value="electro" checked /> Elektro</label><label><input type="checkbox" name="workFamily" value="ekom" /> Ekom</label></fieldset>
           <div class="field wide"><label for="assignmentPurposeInput">Formål og oppgave</label><textarea id="assignmentPurposeInput" required></textarea></div>
           <div class="field"><label for="knownScopeInput">Kjent omfang</label><textarea id="knownScopeInput"></textarea></div>
@@ -337,7 +337,7 @@
           <div class="field"><label for="evidencePhaseInput">Når i arbeidet</label><select id="evidencePhaseInput" required><option value="before">Før arbeidet starter</option><option value="during">Under utførelsen</option><option value="after">Etter arbeidet</option></select></div>
           <div class="field"><label for="evidenceTypeInput">Type</label><select id="evidenceTypeInput" required><option value="photo">Bilde</option><option value="measurement">Måleresultat</option><option value="checklist">Sjekkliste</option><option value="declaration">Erklæring eller skjema</option><option value="product_data">Produktdata / FDV</option><option value="drawing">Tegning</option><option value="other">Annet</option></select></div>
           <div class="field wide"><label for="evidenceTitleInput">Tittel</label><input id="evidenceTitleInput" required placeholder="For eksempel: Risikovurdering før oppstart" /></div>
-          <div class="field wide"><label for="evidenceFileInput">Fil</label><input id="evidenceFileInput" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,.txt,.csv,.xlsx,.xls,.docx,.odt,.zip" /><small>Maksimalt 10 MB. Filen forblir privat i esense.</small></div>
+          <div class="field wide"><label for="evidenceFileInput">Fil</label><input id="evidenceFileInput" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,.txt,.csv,.xlsx,.xls,.docx,.odt,.zip" /><small>Maksimalt 10 MB. Filen forblir privat i FieldSeal.</small></div>
           <div class="field wide"><label for="evidenceNoteInput">Merknad</label><textarea id="evidenceNoteInput" placeholder="Kort forklaring eller referanse. Påkrevd når ingen fil legges ved."></textarea></div>
         </div>
         <div class="dialog-actions"><button class="secondary" type="button" data-close="evidenceDialog">Avbryt</button><button class="primary" type="submit">Registrer dokumentasjon</button></div>
@@ -420,8 +420,8 @@
     </dialog>
 
     <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
-    <script src="/static/i18n.js?v=20" defer></script>
+    <script src="/static/i18n.js?v=22" defer></script>
     <script src="/static/tooltips.js?v=2" defer></script>
-    <script src="/static/app.js?v=37" defer></script>
+    <script src="/static/app.js?v=39" defer></script>
   </body>
 </html>

@@ -1,0 +1,866 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="FieldSeal hackathon product wireframe and 48-hour build board.">
+  <title>FieldSeal Hackathon Wireframe</title>
+  <style>
+    :root {
+      --ink: #172128;
+      --muted: #607078;
+      --line: #d7dfe2;
+      --paper: #ffffff;
+      --soft: #f5f7f7;
+      --soft-blue: #edf5f8;
+      --soft-green: #eaf6ef;
+      --soft-amber: #fff4df;
+      --brand: #ee4d2d;
+      --brand-dark: #bd331b;
+      --blue: #185e8d;
+      --green: #16734a;
+      --amber: #9b6208;
+      --midnight: #3047df;
+      --charcoal: #182127;
+      --max: 1240px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--paper);
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
+      letter-spacing: 0;
+    }
+
+    button, input { font: inherit; }
+
+    button {
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--ink);
+      background: var(--paper);
+      cursor: pointer;
+    }
+
+    button:hover { border-color: #aebbc0; }
+    button:focus-visible, input:focus-visible { outline: 3px solid rgba(24, 94, 141, .24); outline-offset: 2px; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      color: #fff;
+      background: var(--charcoal);
+      border-bottom: 3px solid var(--brand);
+    }
+
+    .topbar-inner {
+      width: min(var(--max), calc(100% - 32px));
+      min-height: 60px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 6px;
+      color: #fff;
+      background: var(--brand);
+      font-weight: 800;
+    }
+
+    .brand strong { font-size: 16px; }
+    .brand span:last-child { color: #bac7cc; font-size: 12px; }
+
+    .top-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #dbe3e6;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #54c78b;
+    }
+
+    .hero {
+      border-bottom: 1px solid var(--line);
+      background: #fafbfb;
+    }
+
+    .hero-inner {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 28px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 430px);
+      gap: 48px;
+      align-items: end;
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--brand-dark);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: clamp(30px, 4vw, 48px);
+      line-height: 1.08;
+    }
+
+    h2 {
+      margin-bottom: 6px;
+      font-size: 25px;
+      line-height: 1.2;
+    }
+
+    h3 {
+      margin-bottom: 4px;
+      font-size: 17px;
+      line-height: 1.3;
+    }
+
+    .hero-copy {
+      max-width: 760px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .north-star {
+      padding: 18px 20px;
+      border-left: 4px solid var(--midnight);
+      background: var(--paper);
+      box-shadow: 0 1px 0 rgba(23, 33, 40, .08);
+    }
+
+    .north-star strong { display: block; margin-bottom: 5px; }
+    .north-star p { margin: 0; color: var(--muted); }
+
+    .tabs-wrap {
+      border-bottom: 1px solid var(--line);
+      background: var(--paper);
+    }
+
+    .tabs {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tab {
+      min-width: max-content;
+      padding: 13px 16px;
+      border: 0;
+      border-bottom: 3px solid transparent;
+      border-radius: 0;
+      color: var(--muted);
+      background: transparent;
+      font-weight: 700;
+    }
+
+    .tab[aria-selected="true"] {
+      color: var(--ink);
+      border-bottom-color: var(--brand);
+    }
+
+    main {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 64px;
+    }
+
+    .panel[hidden] { display: none; }
+    .section-intro { max-width: 800px; margin-bottom: 24px; color: var(--muted); }
+
+    .legend {
+      margin: 0 0 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .legend span { display: inline-flex; align-items: center; gap: 7px; }
+    .swatch { width: 14px; height: 8px; border-radius: 2px; background: var(--blue); }
+    .swatch.private { background: var(--green); }
+    .swatch.midnight { background: var(--midnight); }
+
+    .journey {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      overflow-x: auto;
+    }
+
+    .lane {
+      min-width: 900px;
+      display: grid;
+      grid-template-columns: 150px repeat(5, minmax(140px, 1fr));
+      border-bottom: 1px solid var(--line);
+    }
+
+    .lane:last-child { border-bottom: 0; }
+    .lane > div { min-height: 94px; padding: 14px; border-right: 1px solid var(--line); }
+    .lane > div:last-child { border-right: 0; }
+
+    .lane-name {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: var(--soft);
+    }
+
+    .lane-name strong { font-size: 14px; }
+    .lane-name span { margin-top: 3px; color: var(--muted); font-size: 12px; }
+
+    .event {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      background: var(--paper);
+    }
+
+    .event.active { background: var(--soft-blue); }
+    .event.private { background: var(--soft-green); }
+    .event.chain { color: #192575; background: #f0f1ff; }
+    .event strong { font-size: 13px; }
+    .event small { color: var(--muted); }
+
+    .flow-labels {
+      min-width: 900px;
+      display: grid;
+      grid-template-columns: 150px repeat(5, minmax(140px, 1fr));
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .flow-labels div { padding: 8px 14px; border-right: 1px solid var(--line); }
+    .flow-labels div:last-child { border-right: 0; }
+
+    .screen-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .screen {
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--paper);
+      overflow: hidden;
+    }
+
+    .screen-head {
+      min-height: 64px;
+      padding: 13px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+      background: var(--soft);
+    }
+
+    .screen-head h3 { margin: 0; }
+    .screen-head span { color: var(--muted); font-size: 12px; }
+    .screen-body { min-height: 300px; padding: 16px; }
+
+    .wire-nav {
+      min-height: 36px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--line);
+    }
+
+    .wire-logo { width: 24px; height: 24px; border-radius: 5px; background: var(--brand); }
+    .wire-line { height: 10px; border-radius: 2px; background: #dfe5e7; }
+    .wire-line.dark { background: #829198; }
+    .wire-line.brand { background: #f1a391; }
+    .wire-line.w20 { width: 20%; }
+    .wire-line.w35 { width: 35%; }
+    .wire-line.w50 { width: 50%; }
+    .wire-line.w70 { width: 70%; }
+    .wire-line.w90 { width: 90%; }
+
+    .wire-title { width: 45%; height: 22px; margin: 6px 0 14px; border-radius: 2px; background: #708089; }
+    .wire-row { margin-bottom: 10px; display: flex; gap: 10px; align-items: center; }
+    .wire-box { min-height: 58px; flex: 1; padding: 10px; border: 1px solid var(--line); background: #fafbfb; }
+    .wire-box.emphasis { border-left: 4px solid var(--brand); background: #fff9f7; }
+    .wire-box.private { border-left: 4px solid var(--green); background: var(--soft-green); }
+    .wire-box.midnight { border-left: 4px solid var(--midnight); background: #f1f2ff; }
+
+    .wire-button {
+      width: 94px;
+      height: 30px;
+      margin-left: auto;
+      border-radius: 5px;
+      background: var(--brand);
+    }
+
+    .stepper { margin: 14px 0 16px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .step { height: 6px; background: #dfe5e7; }
+    .step.done { background: var(--green); }
+    .step.current { background: var(--brand); }
+
+    .screen-note {
+      margin: 16px 0 0;
+      padding: 10px 12px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .privacy-map {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 90px minmax(0, 1fr);
+      gap: 22px;
+      align-items: center;
+    }
+
+    .boundary {
+      min-height: 410px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+    }
+
+    .boundary.private-zone { border-top: 5px solid var(--green); background: #fbfdfc; }
+    .boundary.chain-zone { border-top: 5px solid var(--midnight); background: #fbfbff; }
+    .boundary ul { margin: 20px 0 0; padding: 0; list-style: none; }
+    .boundary li { padding: 10px 0; border-bottom: 1px solid var(--line); }
+    .boundary li:last-child { border-bottom: 0; }
+    .boundary li::before { margin-right: 8px; color: var(--green); content: "✓"; font-weight: 800; }
+    .chain-zone li::before { color: var(--midnight); }
+
+    .boundary-callout {
+      margin-top: 22px;
+      padding: 12px;
+      border-left: 3px solid var(--amber);
+      background: var(--soft-amber);
+      color: #60420c;
+      font-size: 13px;
+    }
+
+    .bridge {
+      position: relative;
+      height: 4px;
+      background: var(--midnight);
+    }
+
+    .bridge::after {
+      position: absolute;
+      right: -1px;
+      top: -6px;
+      width: 0;
+      height: 0;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-left: 12px solid var(--midnight);
+      content: "";
+    }
+
+    .bridge-label {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 11px;
+      text-align: center;
+    }
+
+    .scope-grid {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .scope {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+    }
+
+    .scope.must { border-top: 5px solid var(--green); }
+    .scope.should { border-top: 5px solid var(--blue); }
+    .scope.later { border-top: 5px solid var(--amber); }
+    .scope ul { margin: 12px 0 0; padding-left: 18px; }
+    .scope li { margin-bottom: 8px; }
+
+    .time-axis {
+      margin: 24px 0 0;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(130px, 1fr));
+      gap: 2px;
+      overflow-x: auto;
+    }
+
+    .phase {
+      min-height: 190px;
+      padding: 15px;
+      border-top: 5px solid var(--blue);
+      background: var(--soft-blue);
+    }
+
+    .phase:nth-child(4), .phase:nth-child(5) { border-top-color: var(--midnight); background: #f2f3ff; }
+    .phase:last-child { border-top-color: var(--brand); background: #fff7f4; }
+    .phase strong { display: block; margin-bottom: 5px; }
+    .phase time { display: block; margin-bottom: 14px; color: var(--muted); font-size: 12px; }
+    .phase p { margin: 0; color: var(--muted); font-size: 13px; }
+
+    .board {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .workstream {
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      overflow: hidden;
+    }
+
+    .workstream h3 { margin: 0; padding: 13px 14px; border-bottom: 1px solid var(--line); background: var(--soft); }
+
+    .check {
+      position: relative;
+      display: grid;
+      grid-template-columns: 20px minmax(0, 1fr);
+      gap: 8px;
+      align-items: start;
+      padding: 11px 13px;
+      border-bottom: 1px solid var(--line);
+      cursor: pointer;
+    }
+
+    .check:last-child { border-bottom: 0; }
+    .check input { width: 17px; height: 17px; margin: 2px 0 0; accent-color: var(--green); }
+    .check span { color: var(--ink); font-size: 13px; }
+    .check input:checked + span { color: var(--muted); text-decoration: line-through; }
+
+    .done-bar {
+      margin: 26px 0 0;
+      display: grid;
+      grid-template-columns: minmax(180px, 260px) minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .progress-track { height: 10px; border-radius: 5px; background: #e1e6e8; overflow: hidden; }
+    .progress-fill { width: 0; height: 100%; background: var(--green); transition: width .2s ease; }
+    #progressText { min-width: 42px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+    .demo-gate {
+      margin-top: 28px;
+      padding: 20px;
+      border-left: 5px solid var(--brand);
+      background: #fff8f5;
+    }
+
+    .demo-gate ol { margin: 12px 0 0; padding-left: 22px; }
+    .demo-gate li { margin-bottom: 8px; }
+
+    footer {
+      border-top: 1px solid var(--line);
+      background: var(--soft);
+    }
+
+    .footer-inner {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 20px 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .hero-inner, .privacy-map { grid-template-columns: 1fr; }
+      .hero-inner { gap: 20px; }
+      .bridge { width: 4px; height: 60px; margin: 0 auto; }
+      .bridge::after { right: -6px; top: auto; bottom: -1px; border-top: 12px solid var(--midnight); border-right: 8px solid transparent; border-left: 8px solid transparent; border-bottom: 0; }
+      .screen-grid, .scope-grid, .board { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 620px) {
+      .topbar-inner { align-items: flex-start; padding: 12px 0; }
+      .brand span:last-child, .top-status span:last-child { display: none; }
+      .screen-grid, .scope-grid, .board { grid-template-columns: 1fr; }
+      .screen-body { min-height: 260px; }
+      .wire-row { align-items: stretch; flex-direction: column; }
+      .wire-button { margin-left: 0; }
+      .done-bar { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-mark">F</span>
+        <strong>FieldSeal</strong>
+        <span>Hackathon build map</span>
+      </div>
+      <div class="top-status"><span class="status-dot"></span><span>One private report. One verifiable proof.</span></div>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <div>
+        <p class="eyebrow">48-hour product wireframe</p>
+        <h1>Build the proof path first</h1>
+        <p class="hero-copy">FieldSeal turns completed field work into a private, controlled report whose exact issued version can be verified on Midnight without publishing the report itself.</p>
+      </div>
+      <aside class="north-star">
+        <strong>Demo promise</strong>
+        <p>A judge can follow one assignment from creation to recipient verification in under three minutes.</p>
+      </aside>
+    </div>
+  </header>
+
+  <div class="tabs-wrap">
+    <nav class="tabs" aria-label="Wireframe sections">
+      <button class="tab" type="button" role="tab" aria-selected="true" aria-controls="journeyPanel" id="journeyTab">1. User journey</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="screensPanel" id="screensTab">2. Screen wireframes</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="privacyPanel" id="privacyTab">3. Privacy architecture</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="buildPanel" id="buildTab">4. 48-hour build board</button>
+    </nav>
+  </div>
+
+  <main>
+    <section class="panel" id="journeyPanel" role="tabpanel" aria-labelledby="journeyTab">
+      <h2>The complete demonstration journey</h2>
+      <p class="section-intro">Every feature built during the hackathon should advance one of these five moments. Anything else waits.</p>
+      <div class="legend" aria-label="Journey legend">
+        <span><i class="swatch"></i>User action</span>
+        <span><i class="swatch private"></i>Private FieldSeal state</span>
+        <span><i class="swatch midnight"></i>Midnight proof action</span>
+      </div>
+      <div class="journey">
+        <div class="flow-labels" aria-hidden="true">
+          <div>Actor</div><div>1. Assign</div><div>2. Document</div><div>3. Review</div><div>4. Seal</div><div>5. Share &amp; verify</div>
+        </div>
+        <div class="lane">
+          <div class="lane-name"><strong>Project manager</strong><span>Creates and coordinates work</span></div>
+          <div class="event active"><strong>Create assignment</strong><small>Scope, location, trade and team</small></div>
+          <div class="event"><strong>Track progress</strong><small>See evidence timeline</small></div>
+          <div class="event"><strong>Resolve findings</strong><small>Return or approve</small></div>
+          <div class="event private"><strong>Issue package</strong><small>Freeze reviewed report version</small></div>
+          <div class="event active"><strong>Grant access</strong><small>Owner, contractor or inspector</small></div>
+        </div>
+        <div class="lane">
+          <div class="lane-name"><strong>Field professional</strong><span>Performs and records the work</span></div>
+          <div class="event"><strong>Accept assignment</strong><small>Confirm role and responsibility</small></div>
+          <div class="event active"><strong>Add evidence</strong><small>Photos, readings, notes and files</small></div>
+          <div class="event"><strong>Submit completion</strong><small>Immutable review snapshot</small></div>
+          <div class="event private"><strong>Sign locally</strong><small>Private package remains off-chain</small></div>
+          <div class="event"><strong>View handover</strong><small>Same issued report version</small></div>
+        </div>
+        <div class="lane">
+          <div class="lane-name"><strong>Reviewer / AHJ</strong><span>Checks a deliberate submission</span></div>
+          <div class="event"><strong>See assigned scope</strong><small>No private drafts</small></div>
+          <div class="event"><strong>Inspect evidence</strong><small>Timeline and source references</small></div>
+          <div class="event active"><strong>Approve or return</strong><small>Structured findings</small></div>
+          <div class="event"><strong>Confirm issue gate</strong><small>Approval required before seal</small></div>
+          <div class="event"><strong>Verify later</strong><small>Detect changed report versions</small></div>
+        </div>
+        <div class="lane">
+          <div class="lane-name"><strong>Midnight</strong><span>Proof, not document storage</span></div>
+          <div class="event"></div>
+          <div class="event"></div>
+          <div class="event"></div>
+          <div class="event chain"><strong>Anchor commitment</strong><small>Salted 32-byte value only</small></div>
+          <div class="event chain"><strong>Verify / revoke</strong><small>Confirm exact issued version</small></div>
+        </div>
+        <div class="lane">
+          <div class="lane-name"><strong>Recipient</strong><span>Owner, contractor or authority</span></div>
+          <div class="event"></div>
+          <div class="event"></div>
+          <div class="event"></div>
+          <div class="event"></div>
+          <div class="event active"><strong>Open protected report</strong><small>Purpose-bound, revocable access</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="screensPanel" role="tabpanel" aria-labelledby="screensTab" hidden>
+      <h2>Six screens to finish</h2>
+      <p class="section-intro">These are the only screens needed for a convincing end-to-end demo. Reuse the current FieldSeal styling and keep each state sparse.</p>
+      <div class="screen-grid">
+        <article class="screen">
+          <div class="screen-head"><div><h3>01 Manager overview</h3><span>Start and monitor work</span></div><span>Role: manager</span></div>
+          <div class="screen-body">
+            <div class="wire-nav"><i class="wire-logo"></i><i class="wire-line dark w20"></i><i class="wire-button"></i></div>
+            <div class="wire-title"></div>
+            <div class="wire-row"><div class="wire-box"><i class="wire-line dark w50"></i><br><i class="wire-line w35"></i></div><div class="wire-box"><i class="wire-line dark w50"></i><br><i class="wire-line w35"></i></div></div>
+            <div class="wire-row"><div class="wire-box emphasis"><i class="wire-line dark w35"></i><br><i class="wire-line w90"></i><br><i class="wire-line w70"></i></div></div>
+            <p class="screen-note">Primary action: create assignment. Show open, in review and completed work.</p>
+          </div>
+        </article>
+
+        <article class="screen">
+          <div class="screen-head"><div><h3>02 Assignment</h3><span>Five-step field workflow</span></div><span>Role: professional</span></div>
+          <div class="screen-body">
+            <div class="wire-nav"><i class="wire-logo"></i><i class="wire-line dark w20"></i></div>
+            <div class="stepper"><i class="step current"></i><i class="step"></i><i class="step"></i><i class="step"></i><i class="step"></i></div>
+            <div class="wire-row"><div class="wire-box"><i class="wire-line dark w35"></i><br><i class="wire-line w70"></i></div><div class="wire-box emphasis"><i class="wire-line brand w35"></i><br><i class="wire-line dark w70"></i><br><i class="wire-line w90"></i></div></div>
+            <div class="wire-row"><i class="wire-button"></i></div>
+            <p class="screen-note">Steps: brief, plan, execute, inspect, issue. Always show previous / next controls.</p>
+          </div>
+        </article>
+
+        <article class="screen">
+          <div class="screen-head"><div><h3>03 Evidence capture</h3><span>Timestamped private records</span></div><span>Role: work team</span></div>
+          <div class="screen-body">
+            <div class="wire-nav"><i class="wire-logo"></i><i class="wire-line dark w20"></i></div>
+            <div class="wire-title"></div>
+            <div class="wire-row"><div class="wire-box private"><i class="wire-line dark w50"></i><br><i class="wire-line w90"></i><br><i class="wire-line w70"></i></div></div>
+            <div class="wire-row"><div class="wire-box"><i class="wire-line dark w35"></i><br><i class="wire-line w50"></i></div><div class="wire-box"><i class="wire-line dark w35"></i><br><i class="wire-line w50"></i></div></div>
+            <p class="screen-note">Keep files and personal data private. Preserve who added each record and when.</p>
+          </div>
+        </article>
+
+        <article class="screen">
+          <div class="screen-head"><div><h3>04 Review gate</h3><span>Approve or return</span></div><span>Role: reviewer / AHJ</span></div>
+          <div class="screen-body">
+            <div class="wire-nav"><i class="wire-logo"></i><i class="wire-line dark w20"></i></div>
+            <div class="wire-title"></div>
+            <div class="wire-row"><div class="wire-box emphasis"><i class="wire-line dark w35"></i><br><i class="wire-line w90"></i><br><i class="wire-line w70"></i></div></div>
+            <div class="wire-row"><div class="wire-box"><i class="wire-line dark w50"></i></div><div class="wire-box private"><i class="wire-line dark w50"></i></div></div>
+            <p class="screen-note">Reviewer sees submitted snapshots, not private drafts. Approval unlocks report issue.</p>
+          </div>
+        </article>
+
+        <article class="screen">
+          <div class="screen-head"><div><h3>05 Archive &amp; sharing</h3><span>Private report packages</span></div><span>Role: manager</span></div>
+          <div class="screen-body">
+            <div class="wire-nav"><i class="wire-logo"></i><i class="wire-line dark w20"></i></div>
+            <div class="wire-title"></div>
+            <div class="wire-row"><div class="wire-box private"><i class="wire-line dark w35"></i><br><i class="wire-line w90"></i></div></div>
+            <div class="wire-row"><div class="wire-box midnight"><i class="wire-line dark w35"></i><br><i class="wire-line w50"></i></div><i class="wire-button"></i></div>
+            <p class="screen-note">Group by customer, job and trade. Show anchor state and recipient access without exposing content.</p>
+          </div>
+        </article>
+
+        <article class="screen">
+          <div class="screen-head"><div><h3>06 Recipient verification</h3><span>Protected report and proof</span></div><span>Role: owner / contractor</span></div>
+          <div class="screen-body">
+            <div class="wire-nav"><i class="wire-logo"></i><i class="wire-line dark w20"></i></div>
+            <div class="wire-title"></div>
+            <div class="wire-row"><div class="wire-box private"><i class="wire-line dark w35"></i><br><i class="wire-line w90"></i><br><i class="wire-line w70"></i></div><div class="wire-box midnight"><i class="wire-line dark w50"></i><br><i class="wire-line w70"></i></div></div>
+            <div class="wire-row"><i class="wire-button"></i></div>
+            <p class="screen-note">Recipient can view the granted report and see the recorded commitment and preprod transaction needed for an independent network check.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel" id="privacyPanel" role="tabpanel" aria-labelledby="privacyTab" hidden>
+      <h2>Privacy boundary</h2>
+      <p class="section-intro">The hackathon story succeeds only if this separation is obvious in the product, code and pitch.</p>
+      <div class="privacy-map">
+        <section class="boundary private-zone">
+          <p class="eyebrow">Private FieldSeal application</p>
+          <h3>Actual work records stay here</h3>
+          <ul>
+            <li>Customer names and addresses</li>
+            <li>Workers, roles and credentials</li>
+            <li>Photos, measurements and files</li>
+            <li>Plans, findings and report content</li>
+            <li>Encrypted package manifest</li>
+            <li>Recipient permissions and expiry</li>
+          </ul>
+          <div class="boundary-callout">AES-256-GCM package encryption and ordinary application access control remain FieldSeal responsibilities.</div>
+        </section>
+
+        <div aria-label="Only a salted commitment crosses to Midnight">
+          <div class="bridge"></div>
+          <div class="bridge-label">salted 32-byte commitment only</div>
+        </div>
+
+        <section class="boundary chain-zone">
+          <p class="eyebrow">Midnight network</p>
+          <h3>Proof state lives here</h3>
+          <ul>
+            <li>Receipt identifier</li>
+            <li>Document commitment</li>
+            <li>Anchor transaction state</li>
+            <li>Valid / revoked status</li>
+            <li>Recorded verification and transaction metadata</li>
+          </ul>
+          <div class="boundary-callout">No report text, personal data, filenames, measurements or customer details belong on-chain.</div>
+        </section>
+      </div>
+
+      <div class="scope-grid">
+        <section class="scope must"><h3>Must demonstrate</h3><ul><li>Private report remains readable only with access</li><li>Same report creates the same verifiable commitment</li><li>Changed report fails local integrity verification</li><li>Access can expire or be revoked</li><li>Receipt exposes the recorded commitment and preprod transaction for external checking</li></ul></section>
+        <section class="scope should"><h3>Useful if time permits</h3><ul><li>Recipient QR or share link</li><li>One public synthetic verification page</li><li>US role labels: contractor, field professional, reviewer / AHJ</li><li>Jurisdiction and source-reference placeholders</li><li>Mobile evidence capture polish</li></ul></section>
+        <section class="scope later"><h3>Do not build this weekend</h3><ul><li>Billing, subscriptions or marketplaces</li><li>Automated legal conclusions</li><li>Nationwide code or permit engine</li><li>Public worker reputation scores</li><li>Production customer integrations</li><li>Mainnet migration unless required</li></ul></section>
+      </div>
+    </section>
+
+    <section class="panel" id="buildPanel" role="tabpanel" aria-labelledby="buildTab" hidden>
+      <h2>48-hour delivery board</h2>
+      <p class="section-intro">Checkboxes are saved in this browser. Use the sequence as the shared source of truth and cut scope before cutting the core demo path.</p>
+
+      <div class="time-axis" aria-label="Hackathon timeline">
+        <section class="phase"><strong>Freeze the story</strong><time>Hours 0–4</time><p>Agree on roles, demo fixture, privacy claim and exact three-minute walkthrough.</p></section>
+        <section class="phase"><strong>Finish work flow</strong><time>Hours 4–14</time><p>Assignment, team, evidence timeline and completion submission all work end to end.</p></section>
+        <section class="phase"><strong>Issue the report</strong><time>Hours 14–22</time><p>Review gate, encrypted package and protected report are reliable.</p></section>
+        <section class="phase"><strong>Anchor &amp; verify</strong><time>Hours 22–32</time><p>Commitment is registered, checked and shown without overstating the claim.</p></section>
+        <section class="phase"><strong>Share &amp; revoke</strong><time>Hours 32–40</time><p>Recipient link, access duration and verification story are visible.</p></section>
+        <section class="phase"><strong>Pitch &amp; submit</strong><time>Hours 40–48</time><p>Responsive QA, video, README, Devpost copy, screenshots and backup demo.</p></section>
+      </div>
+
+      <div class="done-bar">
+        <strong>Core checklist progress</strong>
+        <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+        <span id="progressText">0%</span>
+      </div>
+
+      <div class="board" id="checklistBoard">
+        <section class="workstream">
+          <h3>Product &amp; demo</h3>
+          <label class="check"><input type="checkbox" data-task="p1"><span>Freeze one US synthetic work scenario</span></label>
+          <label class="check"><input type="checkbox" data-task="p2"><span>Confirm five-step user journey and roles</span></label>
+          <label class="check"><input type="checkbox" data-task="p3"><span>Prepare judge walkthrough under three minutes</span></label>
+          <label class="check"><input type="checkbox" data-task="p4"><span>Capture final screenshots and short video</span></label>
+          <label class="check"><input type="checkbox" data-task="p5"><span>Finish Devpost description and credits</span></label>
+        </section>
+
+        <section class="workstream">
+          <h3>FieldSeal application</h3>
+          <label class="check"><input type="checkbox" data-task="a1"><span>Create and assign a work order</span></label>
+          <label class="check"><input type="checkbox" data-task="a2"><span>Add timestamped evidence from multiple workers</span></label>
+          <label class="check"><input type="checkbox" data-task="a3"><span>Select one professionally responsible person</span></label>
+          <label class="check"><input type="checkbox" data-task="a4"><span>Approve completion and issue encrypted report</span></label>
+          <label class="check"><input type="checkbox" data-task="a5"><span>Open protected report as recipient</span></label>
+        </section>
+
+        <section class="workstream">
+          <h3>Midnight proof</h3>
+          <label class="check"><input type="checkbox" data-task="m1"><span>Generate canonical salted commitment</span></label>
+          <label class="check"><input type="checkbox" data-task="m2"><span>Submit and confirm preprod receipt</span></label>
+          <label class="check"><input type="checkbox" data-task="m3"><span>Verify unchanged report successfully</span></label>
+          <label class="check"><input type="checkbox" data-task="m4"><span>Demonstrate changed-report failure</span></label>
+          <label class="check"><input type="checkbox" data-task="m5"><span>Show revocation without publishing content</span></label>
+        </section>
+
+        <section class="workstream">
+          <h3>Quality &amp; safety</h3>
+          <label class="check"><input type="checkbox" data-task="q1"><span>Run complete workflow smoke test</span></label>
+          <label class="check"><input type="checkbox" data-task="q2"><span>Check desktop and mobile layouts</span></label>
+          <label class="check"><input type="checkbox" data-task="q3"><span>Confirm no credentials or runtime data in GitHub</span></label>
+          <label class="check"><input type="checkbox" data-task="q4"><span>Verify public API returns synthetic safe fields only</span></label>
+          <label class="check"><input type="checkbox" data-task="q5"><span>Prepare local fallback if preprod is unavailable</span></label>
+        </section>
+      </div>
+
+      <section class="demo-gate">
+        <h3>Definition of done</h3>
+        <ol>
+          <li>A manager creates a realistic work order and assigns a team.</li>
+          <li>A field professional records evidence and submits completed work.</li>
+          <li>A reviewer approves the exact version used to issue the report.</li>
+          <li>FieldSeal encrypts the report and anchors only its salted commitment.</li>
+          <li>A recipient receives limited access and verifies the report against Midnight.</li>
+          <li>The team can explain in one sentence what stays private and what goes on-chain.</li>
+        </ol>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner"><span>FieldSeal hackathon working wireframe</span><span>Scope rule: complete the proof path before adding features.</span></div>
+  </footer>
+
+  <script>
+    (() => {
+      const tabs = Array.from(document.querySelectorAll('.tab'));
+      const panels = Array.from(document.querySelectorAll('.panel'));
+
+      function selectTab(tab) {
+        tabs.forEach((item) => item.setAttribute('aria-selected', String(item === tab)));
+        panels.forEach((panel) => { panel.hidden = panel.id !== tab.getAttribute('aria-controls'); });
+        history.replaceState(null, '', `#${tab.getAttribute('aria-controls')}`);
+      }
+
+      tabs.forEach((tab) => tab.addEventListener('click', () => selectTab(tab)));
+
+      const requestedPanel = location.hash.slice(1);
+      const requestedTab = tabs.find((tab) => tab.getAttribute('aria-controls') === requestedPanel);
+      if (requestedTab) selectTab(requestedTab);
+
+      const checks = Array.from(document.querySelectorAll('[data-task]'));
+      const progressFill = document.getElementById('progressFill');
+      const progressText = document.getElementById('progressText');
+
+      function updateProgress() {
+        const completed = checks.filter((check) => check.checked).length;
+        const percent = checks.length ? Math.round((completed / checks.length) * 100) : 0;
+        progressFill.style.width = `${percent}%`;
+        progressText.textContent = `${percent}%`;
+      }
+
+      checks.forEach((check) => {
+        check.checked = localStorage.getItem(`fieldseal-wireframe-${check.dataset.task}`) === '1';
+        check.addEventListener('change', () => {
+          localStorage.setItem(`fieldseal-wireframe-${check.dataset.task}`, check.checked ? '1' : '0');
+          updateProgress();
+        });
+      });
+
+      updateProgress();
+    })();
+  </script>
+</body>
+</html>
