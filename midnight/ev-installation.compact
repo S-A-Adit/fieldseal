@@ -1,0 +1,32 @@
+pragma language_version 0.23;
+
+import CompactStandardLibrary;
+
+// Stores 32-byte commitment of the EV Charger Installation package
+export ledger activeInstallations: Set<Bytes<32>>;
+export ledger revokedInstallations: Set<Bytes<32>>;
+export sealed ledger contractOwner: Bytes<32>;
+
+witness localSecret(): Bytes<32>;
+
+constructor() {
+    contractOwner = disclose(ownerKey(localSecret()));
+}
+
+export circuit registerInstallation(installationCommitment: Bytes<32>): [] {
+    assert(contractOwner == ownerKey(localSecret()), "Only the contract owner can register installations");
+    assert(!activeInstallations.member(disclose(installationCommitment)), "Installation already registered");
+    assert(!revokedInstallations.member(disclose(installationCommitment)), "Installation is marked as revoked");
+    activeInstallations.insert(disclose(installationCommitment));
+}
+
+export circuit revokeInstallation(installationCommitment: Bytes<32>): [] {
+    assert(contractOwner == ownerKey(localSecret()), "Only the contract owner can revoke installations");
+    assert(activeInstallations.member(disclose(installationCommitment)), "Installation not found");
+    assert(!revokedInstallations.member(disclose(installationCommitment)), "Installation already revoked");
+    revokedInstallations.insert(disclose(installationCommitment));
+}
+
+circuit ownerKey(secret: Bytes<32>): Bytes<32> {
+    return persistentHash<Vector<2, Bytes<32>>>([pad(32, "ev:owner:"), secret]);
+}
