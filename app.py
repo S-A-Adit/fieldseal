@@ -37,7 +37,7 @@ ALLOWED_EVIDENCE_EXTENSIONS = {
     ".pdf", ".jpg", ".jpeg", ".png", ".webp", ".txt", ".csv",
     ".xlsx", ".xls", ".docx", ".odt", ".zip",
 }
-DEMO_ASSIGNMENT_TITLE = "FieldSeal demo: Level 2 EV charger installation"
+DEMO_ASSIGNMENT_TITLE = "Demonstrasjon: kurs og nettverkspunkt med Midnight-kvittering"
 DEMO_REPORT_LANGUAGES = {"no", "en", "pl", "lt", "lv"}
 DEMO_ACCESS_PRESETS = {
     "owner": {
@@ -57,47 +57,47 @@ DEMO_ACCESS_PRESETS = {
     },
 }
 DEMO_PUBLIC_REPORT = {
-    "title": "Issued EV charger installation report",
-    "subtitle": "Synthetic US residential case: hardwired 48 A Level 2 EV charger",
-    "job_reference": "FS-EV-DEMO-2026-0717-01",
-    "property_reference": "Synthetic residence / garage and service panel MSP-1, Bradenton, Florida",
-    "work_period": {"started": "17 Jul 2026, 08:30", "completed": "17 Jul 2026, 16:10"},
+    "title": "Issued electrical work report",
+    "subtitle": "Synthetic residential case: dedicated circuit and Cat 6A outlet for a home office",
+    "job_reference": "ES-DEMO-2026-0715-04",
+    "property_reference": "Demo property / home office and distribution board DB1",
+    "work_period": {"started": "14 Jul 2026, 08:12", "completed": "15 Jul 2026, 14:36"},
     "parties": [
-        {"label": "Property owner", "value": "Demo homeowner (synthetic)"},
-        {"label": "Contractor", "value": "Suncoast EV Electric LLC (synthetic)"},
-        {"label": "Responsible contractor", "value": "Florida-licensed electrical contractor (synthetic)"},
+        {"label": "Property owner", "value": "Demo owner (synthetic)"},
+        {"label": "Contractor", "value": "Northline Installation AS (synthetic)"},
+        {"label": "Responsible installer", "value": "Qualified supervisor (synthetic)"},
     ],
     "summary": (
-        "A hardwired 48 A Level 2 EV charger was installed in a synthetic residential garage on a dedicated "
-        "60 A, 240 V branch circuit. The package records the load calculation, permit placeholder, equipment "
-        "installation, electrical tests, commissioning, photographs and controlled owner handover."
+        "A dedicated 16 A final circuit and one Cat 6A permanent link were installed for a home-office "
+        "workstation in a synthetic property. Electrical and electronic communications work were planned "
+        "as separate work packages, coordinated at the shared route and completed with final inspection."
     ),
     "work_items": [
-        "Documented service and load calculation for the added continuous EV charging load",
-        "Installed a dedicated 60 A, 240 V branch circuit from service panel MSP-1",
-        "Mounted and hardwired a 48 A Level 2 EV charger in the garage",
-        "Applied circuit and disconnect labels and recorded commissioning evidence",
+        "New 16 A final circuit from distribution board DB1 to the home office",
+        "Type A 30 mA residual-current protection and updated circuit identification",
+        "One Cat 6A permanent link with labelled outlets at both ends",
+        "Separation and routing recorded where electrical and telecom systems share the route",
     ],
     "tests_and_results": [
-        {"test": "Equipment grounding conductor continuity", "result": "0.12 ohm", "status": "Pass"},
+        {"test": "Protective conductor continuity", "result": "0.18 ohm", "status": "Pass"},
         {"test": "Insulation resistance", "result": ">500 MOhm", "status": "Pass"},
-        {"test": "Supply voltage and polarity", "result": "241 V / correct", "status": "Pass"},
-        {"test": "Termination torque verification", "result": "Per manufacturer", "status": "Pass"},
-        {"test": "EV charger commissioning and fault test", "result": "PASS", "status": "Pass"},
+        {"test": "Earth fault loop impedance", "result": "0.72 ohm", "status": "Pass"},
+        {"test": "Residual-current device trip time", "result": "18 ms", "status": "Pass"},
+        {"test": "Cat 6A permanent-link certification", "result": "PASS", "status": "Pass"},
     ],
     "documents": [
-        {"name": "Load calculation", "detail": "Synthetic service and continuous-load calculation", "status": "Included"},
-        {"name": "Permit and inspection record", "detail": "Synthetic permit placeholder and review status", "status": "Included"},
-        {"name": "Panel schedule", "detail": "MSP-1 updated with EV charger circuit identification", "status": "Included"},
-        {"name": "Product and owner data", "detail": "Breaker, conductor and EV charger documentation", "status": "Included"},
-        {"name": "Commissioning record", "detail": "Electrical checks and EV charger functional test", "status": "Included"},
-        {"name": "Photographic record", "detail": "Panel, route, labels and completed charger", "status": "Included"},
+        {"name": "Declaration of conformity", "detail": "Signed scope and standards statement", "status": "Included"},
+        {"name": "Final inspection", "detail": "Visual checks and electrical measurements", "status": "Included"},
+        {"name": "Circuit schedule", "detail": "DB1 updated with circuit identification", "status": "Included"},
+        {"name": "Product and O&M data", "detail": "Protection device, outlet and cable data", "status": "Included"},
+        {"name": "Cat 6A certification", "detail": "Permanent-link measurement result", "status": "Included"},
+        {"name": "Photographic record", "detail": "Route, terminations and completed installation", "status": "Included"},
     ],
     "timeline": [
-        {"time": "17 Jul, 08:30", "event": "Assignment accepted and responsibility recorded"},
-        {"time": "17 Jul, 09:05", "event": "Load calculation and installation plan approved"},
-        {"time": "17 Jul, 15:25", "event": "Electrical tests and charger commissioning added"},
-        {"time": "17 Jul, 16:10", "event": "Version 1 issued to the property owner"},
+        {"time": "14 Jul, 08:12", "event": "Assignment accepted and responsibility recorded"},
+        {"time": "14 Jul, 09:04", "event": "Risk assessment and work method registered"},
+        {"time": "15 Jul, 13:48", "event": "Final inspection and measurements added"},
+        {"time": "15 Jul, 14:36", "event": "Version 1 issued to the property owner"},
     ],
     "deviations": "No deviations were registered in this synthetic exercise.",
     "handover_notes": (
@@ -660,7 +660,7 @@ def midnight_anchor_summary(connection: sqlite3.Connection, package: sqlite3.Row
         "queued": "Dokumentforpliktelsen venter på forankring. Rapportinnhold og personopplysninger forblir private.",
         "proving": "Det genereres et privat bevis for dokumentforpliktelsen. Rapportinnholdet sendes ikke til Midnight.",
         "failed": "Forankringen er ikke bekreftet. Den lokale integritetskvitteringen gjelder fortsatt, og et nytt forsøk planlegges.",
-        "confirmed": "Dokumentforpliktelsen er bekreftet på Midnight. Rapportinnhold og personopplysninger forblir private i FieldSeal.",
+        "confirmed": "Dokumentforpliktelsen er bekreftet på Midnight. Rapportinnhold og personopplysninger forblir private i esense.",
         "revocation_queued": "Tilbakekalling venter på registrering på Midnight.",
         "revocation_pending": "Tilbakekalling behandles på Midnight.",
         "revocation_failed": "Tilbakekallingen er ikke bekreftet på Midnight ennå. Et nytt forsøk planlegges.",
@@ -671,7 +671,7 @@ def midnight_anchor_summary(connection: sqlite3.Connection, package: sqlite3.Row
             "queued": "The document commitment is waiting to be anchored. Report content and personal data remain private.",
             "proving": "A private proof is being generated for the document commitment. Report content is not sent to Midnight.",
             "failed": "The anchor is not confirmed. The local integrity receipt remains valid and a retry is scheduled.",
-            "confirmed": "The document commitment is confirmed on Midnight. Report content and personal data remain private in FieldSeal.",
+            "confirmed": "The document commitment is confirmed on Midnight. Report content and personal data remain private in esense.",
             "revocation_queued": "Revocation is waiting to be registered on Midnight.",
             "revocation_pending": "Revocation is being processed on Midnight.",
             "revocation_failed": "Revocation is not yet confirmed on Midnight. A retry is scheduled.",
@@ -779,7 +779,7 @@ def upsert_user_identity(provider: str, subject: str, email: str, name: str) -> 
         ).fetchone()
         email_user = connection.execute("SELECT * FROM users WHERE lower(email) = ?", (email,)).fetchone()
         if identity_user and email_user and identity_user["id"] != email_user["id"]:
-            abort(409, "Innloggingsidentiteten og e-postadressen tilhører ulike FieldSeal-brukere")
+            abort(409, "Innloggingsidentiteten og e-postadressen tilhører ulike esense-brukere")
         user = identity_user or email_user
         if user:
             user_id = user["id"]
@@ -1354,10 +1354,44 @@ def login():
         providers.append("<a class='microsoft' href='/auth/microsoft'>Fortsett med Microsoft</a>")
     if google_enabled:
         providers.append("<a class='google' href='/auth/google'>Fortsett med Google</a>")
+    
+    # Always provide a mock developer login option for easy local team testing/hackathon use
+    mock_form = """
+    <form action="/auth/mock" method="POST" style="margin-top:20px; display:grid; gap:10px;">
+        <input type="hidden" name="csrf_token" value="{csrf_val}">
+        <input type="email" name="email" placeholder="developer@example.com" required style="min-height:50px; padding:0 15px; border:1px solid #c9cbd1; border-radius:4px; font-family:inherit;">
+        <button type="submit" style="min-height:50px; background:#24252b; color:white; border:none; border-radius:4px; font-weight:800; cursor:pointer;">Mock Login (Local Dev)</button>
+    </form>
+    """.replace("{csrf_val}", csrf_token() if session.get("csrf") else "")
+    
     provider_links = "".join(providers) or "<p class='unavailable'>Ingen innloggingsleverandør er konfigurert.</p>"
-    return f"""<!doctype html><html lang='no'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><meta name='theme-color' content='#f0502f'><title>Logg inn | FieldSeal</title><script src='/static/i18n.js?v=22' defer></script><style>
+    return f"""<!doctype html><html lang='no'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><meta name='theme-color' content='#f0502f'><title>Logg inn | esense</title><script src='/static/i18n.js?v=20' defer></script><style>
     *{{box-sizing:border-box}}body{{margin:0;min-height:100vh;display:grid;place-items:center;background:#f7f7f8;color:#24252b;font-family:Inter,system-ui,sans-serif}}main{{width:min(460px,calc(100vw - 28px));background:white;border:1px solid #e5e5e8;padding:40px;border-radius:5px;box-shadow:0 12px 36px #24252b0d}}.language-row{{display:flex;justify-content:flex-end;align-items:center;gap:7px;margin-bottom:28px}}.language-row span{{color:#6d7078;font-size:10px;font-weight:800;text-transform:uppercase}}.language-row select{{min-height:36px;border:1px solid #c9cbd1;border-radius:4px;background:white;padding:0 9px;font-weight:700}}.mark{{display:grid;place-items:center;width:48px;height:48px;border-radius:5px;background:#f0502f;color:white;font-weight:900;font-size:23px}}h1{{margin:22px 0 8px;font-size:34px;letter-spacing:0}}p{{margin:0 0 26px;color:#6d7078;line-height:1.55}}.providers{{display:grid;gap:10px}}a{{display:flex;align-items:center;justify-content:center;min-height:50px;border:1px solid transparent;border-radius:4px;color:white;text-decoration:none;font-weight:800}}a.microsoft{{background:#185abd}}a.google{{background:#f0502f}}a:hover{{filter:brightness(.92)}}.unavailable{{padding:14px;border:1px solid #e5e5e8;border-radius:4px;background:#f7f7f8;color:#6d7078}}small{{display:block;margin-top:20px;padding-top:18px;border-top:1px solid #e5e5e8;color:#6d7078;line-height:1.5}}
-    </style></head><body><main><label class='language-row'><span>Språk</span><select data-language-select aria-label='Språk'><option value='no'>Norsk</option><option value='en'>English</option></select></label><div class='mark'>F</div><h1>FieldSeal</h1><p>Logg inn for å opprette ditt eget arbeidsområde eller åpne en invitasjon.</p><div class='providers'>{provider_links}</div><small>Oppdrag gir ikke i seg selv kompetanse, autorisasjon eller faglig ansvar. Kilder og vurderinger skal kontrolleres for den konkrete jobben.</small></main></body></html>"""
+    </style></head><body><main><label class='language-row'><span>Språk</span><select data-language-select aria-label='Språk'><option value='no'>Norsk</option><option value='en'>English</option></select></label><div class='mark'>e</div><h1>esense</h1><p>Logg inn for å opprette ditt eget arbeidsområde eller åpne en invitasjon.</p><div class='providers'>{provider_links}</div>{mock_form}<small>Oppdrag gir ikke i seg selv kompetanse, autorisasjon eller faglig ansvar. Kilder og vurderinger skal kontrolleres for den konkrete jobben.</small></main></body></html>"""
+
+
+@app.post("/auth/mock")
+def mock_login():
+    email = normalize_email(request.form.get("email", "").strip())
+    if not email:
+        abort(400)
+    user_id = f"usr_mock_{hashlib.md5(email.encode('utf-8')).hexdigest()[:12]}"
+    with db() as connection:
+        connection.execute(
+            """
+            INSERT OR IGNORE INTO users (id, google_sub, email, display_name, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            (user_id, f"mock:{user_id}", email, email.split("@")[0].capitalize(), now_iso(), now_iso())
+        )
+    pending_invite = str(session.get("pending_org_invite", ""))
+    session.clear()
+    session.permanent = True
+    session["user_id"] = user_id
+    if pending_invite:
+        session["pending_org_invite"] = pending_invite
+    csrf_token()
+    return redirect(url_for("join_organization", token=pending_invite) if pending_invite else "/")
 
 
 @app.get("/auth/google")
@@ -1385,6 +1419,7 @@ def google_callback():
         session["pending_org_invite"] = pending_invite
     csrf_token()
     return redirect(url_for("join_organization", token=pending_invite) if pending_invite else "/")
+
 
 
 @app.get("/auth/microsoft")
@@ -1481,9 +1516,9 @@ def join_organization(token: str):
     user_name = html.escape(str(user["display_name"] or user["email"]))
     csrf = html.escape(csrf_token(), quote=True)
     expires_at = html.escape(link["expires_at"][:10])
-    return f"""<!doctype html><html lang='no'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><meta name='theme-color' content='#f0502f'><title>Bli med | FieldSeal</title><style>
+    return f"""<!doctype html><html lang='no'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><meta name='theme-color' content='#f0502f'><title>Bli med | esense</title><style>
     *{{box-sizing:border-box}}body{{margin:0;min-height:100vh;display:grid;place-items:center;background:#f7f7f8;color:#24252b;font-family:Inter,system-ui,sans-serif}}main{{width:min(520px,calc(100vw - 28px));background:white;border:1px solid #e5e5e8;padding:38px;border-radius:5px;box-shadow:0 12px 36px #24252b0d}}.mark{{display:grid;place-items:center;width:46px;height:46px;border-radius:5px;background:#f0502f;color:white;font-size:22px;font-weight:900}}h1{{margin:22px 0 8px;font-size:30px}}p{{color:#6d7078;line-height:1.55}}.facts{{margin:24px 0;border:1px solid #e5e5e8}}.facts div{{display:grid;grid-template-columns:130px 1fr;gap:14px;padding:12px 14px;border-bottom:1px solid #e5e5e8}}.facts div:last-child{{border:0}}.facts span{{color:#6d7078;font-size:12px}}.facts strong{{font-size:13px}}.notice{{border-left:4px solid #255a83;background:#edf4f8;padding:14px;font-size:13px;line-height:1.5}}button{{width:100%;min-height:50px;margin-top:22px;border:0;border-radius:4px;background:#f0502f;color:white;font:inherit;font-weight:800;cursor:pointer}}small{{display:block;margin-top:16px;color:#6d7078;line-height:1.45}}
-    </style></head><body><main><div class='mark'>F</div><h1>Bli med i {organization_name}</h1><p>Du blir først lagt til som medlem. En leder kan senere gi deg riktig rolle og tilgang til arbeidsfunksjoner.</p><div class='facts'><div><span>Organisasjon</span><strong>{organization_name}</strong></div><div><span>Logget inn som</span><strong>{user_name}</strong></div><div><span>Lenken gjelder til</span><strong>{expires_at}</strong></div></div><div class='notice'>Medlemskap gir ikke automatisk tilgang til oppdrag, kundedata eller rapporter. Rapporttilgang deles separat og kan trekkes tilbake.</div><form method='post'><input type='hidden' name='csrf' value='{csrf}'><button type='submit'>Bli med i organisasjonen</button></form><small>Invitasjonen gir ingen faglig godkjenning, kompetanse eller myndighetsrolle.</small></main></body></html>"""
+    </style></head><body><main><div class='mark'>e</div><h1>Bli med i {organization_name}</h1><p>Du blir først lagt til som medlem. En leder kan senere gi deg riktig rolle og tilgang til arbeidsfunksjoner.</p><div class='facts'><div><span>Organisasjon</span><strong>{organization_name}</strong></div><div><span>Logget inn som</span><strong>{user_name}</strong></div><div><span>Lenken gjelder til</span><strong>{expires_at}</strong></div></div><div class='notice'>Medlemskap gir ikke automatisk tilgang til oppdrag, kundedata eller rapporter. Rapporttilgang deles separat og kan trekkes tilbake.</div><form method='post'><input type='hidden' name='csrf' value='{csrf}'><button type='submit'>Bli med i organisasjonen</button></form><small>Invitasjonen gir ingen faglig godkjenning, kompetanse eller myndighetsrolle.</small></main></body></html>"""
 
 
 @app.get("/")
@@ -3330,8 +3365,37 @@ def policy_metadata():
     return jsonify({"id": policy["id"], "version": policy["version"], "status": policy["status"], "notice": policy["notice"], "source_count": len(policy["sources"])})
 
 
+@app.post("/api/assignments/<assignment_id>/analyze")
+@login_required
+def analyze_assignment(assignment_id):
+    user = current_user()
+    with db() as connection:
+        assignment = assignment_row(connection, assignment_id)
+        if not can_access_assignment(connection, assignment, user):
+            abort(403)
+        
+        data = request.get_json(silent=True) or {}
+        job_description = data.get("job_description") or data.get("query") or assignment["known_scope"]
+        
+        if not job_description or not job_description.strip():
+            return jsonify({"success": False, "error": "Job description is missing", "code": "VALIDATION_ERROR"}), 400
+            
+        from retriever import Retriever
+        from compliance_agent import ComplianceAgent
+        
+        retriever = Retriever()
+        agent = ComplianceAgent(retriever)
+        
+        result = agent.analyze(job_description)
+        if not result.get("success"):
+            return jsonify(result), 400
+            
+        return jsonify(result)
+
+
 init_db()
 
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=int(os.environ.get("PORT", "5000")), debug=False)
+
