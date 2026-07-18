@@ -108,17 +108,34 @@ class ComplianceAgent:
         if "ev charger" in query_lower or "nec 625" in query_lower:
             applicable_regulations.append({
                 "code": "NEC 625",
-                "title": "Electric Vehicle Power Transfer System",
+                "title": "Electric Vehicle Power Transfer System (wiring, protection, and coupling)",
                 "url": "https://www.nfpa.org/codes-and-standards/all-codes-and-standards/list-of-codes-and-standards/detail?code=625"
             })
+            applicable_regulations.append({
+                "code": "NEC 250",
+                "title": "Grounding and Bonding",
+                "url": "https://www.nfpa.org/codes-and-standards/all-codes-and-standards/list-of-codes-and-standards/detail?code=250"
+            })
+            applicable_regulations.append({
+                "code": "NEC 310",
+                "title": "Conductors for General Wiring",
+                "url": "https://www.nfpa.org/codes-and-standards/all-codes-and-standards/list-of-codes-and-standards/detail?code=310"
+            })
+            
             required.append("✓ Permit")
             required.append("✓ Inspection")
+            required.append("✓ 50 Amp breaker (for NEMA 14-50)")
+            required.append("✓ 6 AWG copper wire")
+            required.append("✓ Grounding path continuity check")
             
             if "torque" not in query_lower:
-                missing.append("□ Torque measurement")
+                missing.append("□ Torque measurement (terminal lugs to spec)")
             if "panel photo" not in query_lower and "photo" not in query_lower:
-                missing.append("□ Panel photo")
+                missing.append("□ Panel photo showing 2-pole breaker")
+            if "gfci" not in query_lower:
+                missing.append("□ GFCI protection certification")
             confidence_score = 0.95
+
 
         # Handle breaker panel
         elif "panel" in query_lower or "breaker" in query_lower:
