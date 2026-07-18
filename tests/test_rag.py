@@ -134,11 +134,29 @@ class TestRAGPipeline(unittest.TestCase):
         self.assertTrue(data["success"])
         self.assertTrue(any(r["code"] == "NEC 625" for r in data["applicable_regulations"]))
 
+    def test_mock_login(self):
+        client = esense.app.test_client()
+        # Post to mock login
+        response = client.post(
+            "/auth/mock",
+            data={"email": "developer-test@example.com"}
+        )
+        # Should redirect (302) to home or invite page
+        self.assertEqual(response.status_code, 302)
+        
+        # Verify user is now authenticated by querying a protected endpoint
+        # /api/policy is a protected endpoint
+        res = client.get("/api/policy")
+        self.assertEqual(res.status_code, 200)
+        policy_data = json.loads(res.data)
+        self.assertIn("version", policy_data)
+
     @classmethod
     def tearDownClass(cls):
         shutil.rmtree(temp_dir, ignore_errors=True)
 
 if __name__ == "__main__":
     unittest.main()
+
 
 
